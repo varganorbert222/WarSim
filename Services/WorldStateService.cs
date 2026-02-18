@@ -1,50 +1,68 @@
-﻿using WarSim.Domain;
+﻿using System.Collections.Concurrent;
+using System.Linq;
+using Microsoft.Extensions.Logging;
+using WarSim.Domain;
 
 namespace WarSim.Services
 {
     public class WorldStateService
     {
-        private readonly List<Unit> _units = new();
+        private readonly ConcurrentDictionary<Guid, Unit> _units = new();
+        private readonly ILogger<WorldStateService> _logger;
 
-        public WorldStateService()
+        public WorldStateService(ILogger<WorldStateService> logger)
         {
+            _logger = logger;
+
             // Demo egységek
-            _units.Add(new Unit
+            var u1 = new Unit
             {
                 Name = "Alpha-1",
                 Latitude = 47.4979,
                 Longitude = 19.0402
-            });
+            };
 
-            _units.Add(new Unit
+            var u2 = new Unit
             {
                 Name = "Bravo-2",
                 Latitude = 47.50,
                 Longitude = 19.05
-            });
+            };
+
+            _units[u1.Id] = u1;
+            _units[u2.Id] = u2;
         }
 
         public IReadOnlyList<Unit> GetUnits()
         {
-            return _units;
+            return _units.Values.ToList();
         }
 
         public Unit? GetUnit(Guid id)
         {
-            return _units.FirstOrDefault(u => u.Id == id);
+            return _units.TryGetValue(id, out var unit) ? unit : null;
         }
 
-        public void MoveUnit(Guid id, double lat, double lon)
+        /// <summary>
+        /// Move a unit. Returns true if the unit existed and was updated.
+        /// </summary>
+        public bool MoveUnit(Guid id, double lat, double lon)
         {
-            var unit = GetUnit(id);
-            if (unit is null)
+            if (_units.TryGetValue(id, out var unit))
             {
-                return;
+                lock (unit)
+                {
+                    unit.Latitude = lat;
+                    unit.Longitude = lon;
+                    unit.Status = UnitStatus.Moving;
+                }
+
+                _logger.LogInformation("Unit {UnitId} moved to {Lat},{Lon}", id, lat, lon);
+                return true;
             }
 
-            unit.Latitude = lat;
-            unit.Longitude = lon;
-            unit.Status = UnitStatus.Moving;
+            _logger.LogWarning("Attempted to move non-existing unit {UnitId}", id);
+            return false;
         }
     }
 

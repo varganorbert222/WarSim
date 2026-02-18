@@ -9,10 +9,12 @@ namespace WarSim.Controllers
     public class UnitsController : ControllerBase
     {
         private readonly WorldStateService _world;
+        private readonly ILogger<UnitsController> _logger;
 
-        public UnitsController(WorldStateService world)
+        public UnitsController(WorldStateService world, ILogger<UnitsController> logger)
         {
             _world = world;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,9 +26,17 @@ namespace WarSim.Controllers
         public record MoveCommand(Guid UnitId, double Latitude, double Longitude);
 
         [HttpPost("move")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult MoveUnit([FromBody] MoveCommand cmd)
         {
-            _world.MoveUnit(cmd.UnitId, cmd.Latitude, cmd.Longitude);
+            var moved = _world.MoveUnit(cmd.UnitId, cmd.Latitude, cmd.Longitude);
+            if (!moved)
+            {
+                _logger.LogWarning("Move request for unknown unit {UnitId}", cmd.UnitId);
+                return NotFound();
+            }
+
             return Accepted();
         }
     }
