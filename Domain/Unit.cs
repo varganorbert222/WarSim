@@ -1,21 +1,59 @@
-﻿namespace WarSim.Domain
+﻿using System;
+
+namespace WarSim.Domain
 {
-    public class Unit
+    /// <summary>
+    /// Base class for all units in the simulation.
+    /// Designed to be lightweight and easily extended by specific unit types.
+    /// </summary>
+    public abstract class Unit
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        protected Unit()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        // Keep setter to allow creating snapshot clones with the same identity
+        public Guid Id { get; set; }
+
         public string Name { get; set; } = string.Empty;
-        public double Latitude
-        {
-            get; set;
-        }
-        public double Longitude
-        {
-            get; set;
-        }
-        public double Heading
-        {
-            get; set;
-        }
+
+        /// <summary>
+        /// Geographic position - latitude in degrees.
+        /// </summary>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// Geographic position - longitude in degrees.
+        /// </summary>
+        public double Longitude { get; set; }
+
+        /// <summary>
+        /// Heading in degrees (0-360).
+        /// </summary>
+        public double Heading { get; set; }
+
         public UnitStatus Status { get; set; } = UnitStatus.Idle;
+
+        /// <summary>
+        /// Current health of the unit. When <= 0 the unit is considered destroyed.
+        /// </summary>
+        public double Health { get; set; } = 100.0;
+
+        /// <summary>
+        /// Faction identifier. Units with the same faction are considered allies.
+        /// </summary>
+        public int FactionId { get; set; } = 0;
+
+        /// <summary>
+        /// Vision range in meters; used by AI for line-of-sight / target selection.
+        /// </summary>
+        public double VisionRangeMeters { get; set; } = 2000.0;
+
+        /// <summary>
+        /// Category string for easier filtering in UIs (e.g. "Air", "Land", "Sea").
+        /// Subclasses can override to provide a more specific value.
+        /// </summary>
+        public virtual string Category => "Generic";
     }
 }
