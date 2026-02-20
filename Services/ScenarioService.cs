@@ -1,527 +1,277 @@
 using WarSim.Domain;
 using WarSim.Domain.Units;
 using WarSim.Domain.Projectiles;
-using WarSim.Data;
+using WarSim.DTOs;
+using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
     /// <summary>
-    /// Service for creating realistic scenario setups.
-    /// Caucasus scenario: Blue (Georgia) vs Red (Russia)
+    /// Service for creating and loading scenario setups from JSON definitions.
+    /// Supports mission editor integration via JSON import/export.
     /// </summary>
     public class ScenarioService
     {
-        public WorldState CreateCaucasusScenario()
+        private readonly ILogger<ScenarioService> _logger;
+
+        public ScenarioService(ILogger<ScenarioService> logger)
         {
-            var units = new List<Unit>();
-            var projectiles = new List<Projectile>();
-            var factions = new List<Faction>
+            _logger = logger;
+        }
+
+        public WorldState LoadScenarioFromFile(string filePath)
+        {
+            if (!File.Exists(filePath))
             {
-                new() { Id = 1, Name = "Georgia (Blue)", Color = "#0066CC", Allies = new List<int> { 1 } },
-                new() { Id = 2, Name = "Russia (Red)", Color = "#CC0000", Allies = new List<int> { 2 } }
+                throw new FileNotFoundException($"Scenario file not found: {filePath}");
+            }
+
+            var json = File.ReadAllText(filePath);
+            return LoadScenarioFromJson(json);
+        }
+
+        public WorldState LoadScenarioFromJson(string json)
+        {
+            var scenarioDto = JsonSerializer.Deserialize<ScenarioDefinitionDto>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (scenarioDto == null)
+            {
+                throw new InvalidOperationException("Failed to deserialize scenario JSON");
+            }
+
+            return BuildWorldStateFromDto(scenarioDto);
+        }
+
+        public ScenarioDefinitionDto ExportScenarioToDto(WorldState worldState)
+        {
+            var dto = new ScenarioDefinitionDto
+            {
+                Name = "Exported Scenario",
+                Description = "Scenario exported from running simulation",
+                Factions = worldState.Factions.Select(f => new FactionDefinitionDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Color = f.Color,
+                    Allies = f.Allies.ToList()
+                }).ToList(),
+                Units = worldState.Units.Select(u => new UnitDefinitionDto
+                {
+                    Name = u.Name,
+                    Category = u.UnitCategory.ToString(),
+                    Subcategory = u.Subcategory,
+                    Latitude = u.Latitude,
+                    Longitude = u.Longitude,
+                    Heading = u.Heading,
+                    Speed = GetUnitSpeed(u),
+                    Status = u.Status.ToString(),
+                    FactionId = u.FactionId,
+                    Health = u.Health,
+                    VisionRangeMeters = u.VisionRangeMeters,
+                    Properties = ExtractUnitProperties(u)
+                }).ToList()
             };
 
-            // Blue forces (Georgia)
-            units.AddRange(CreateBlueAirForces());
-            units.AddRange(CreateBlueGroundForces());
-            units.AddRange(CreateBlueNavalForces());
-            units.AddRange(CreateBlueStructures());
+            return dto;
+        }
 
-            // Red forces (Russia)
-            units.AddRange(CreateRedAirForces());
-            units.AddRange(CreateRedGroundForces());
-            units.AddRange(CreateRedNavalForces());
-            units.AddRange(CreateRedStructures());
+        private WorldState BuildWorldStateFromDto(ScenarioDefinitionDto dto)
+        {
+            var factions = dto.Factions.Select(f => new Faction
+            {
+                Id = f.Id,
+                Name = f.Name,
+                Color = f.Color,
+                Allies = f.Allies.ToList()
+            }).ToList();
+
+            var units = dto.Units.Select(u => CreateUnitFromDto(u)).ToList();
+            var projectiles = new List<Projectile>();
+
+            _logger.LogInformation($"Loaded scenario '{dto.Name}' with {units.Count} units and {factions.Count} factions");
 
             return new WorldState(units, projectiles, factions, 0);
         }
 
-        private List<Unit> CreateBlueAirForces()
+        private Unit CreateUnitFromDto(UnitDefinitionDto dto)
         {
-            var units = new List<Unit>();
-
-            // Batumi - F-16 CAP
-            units.Add(new Aircraft(AirplaneSubcategory.Multirole)
+            if (!Enum.TryParse<UnitCategory>(dto.Category, true, out var category))
             {
-                Name = "Viper 1-1",
-                Latitude = CaucasusScenarioData.Airbases.Batumi.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Batumi.Longitude,
-                Heading = 90,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 100,
-                VisionRangeMeters = 8000,
-                Capacity = 1
-            });
+                throw new InvalidOperationException($"Invalid unit category: {dto.Category}");
+            }
 
-            units.Add(new Aircraft(AirplaneSubcategory.Multirole)
+            if (!Enum.TryParse<UnitStatus>(dto.Status, true, out var status))
             {
-                Name = "Viper 1-2",
-                Latitude = CaucasusScenarioData.Airbases.Batumi.Latitude + 0.002,
-                Longitude = CaucasusScenarioData.Airbases.Batumi.Longitude + 0.001,
-                Heading = 90,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 100,
-                VisionRangeMeters = 8000,
-                Capacity = 1
-            });
+                status = UnitStatus.Idle;
+            }
 
-            // Kobuleti - Su-25 Ground Attack
-            units.Add(new Aircraft(AirplaneSubcategory.Attack)
+            Unit unit = category switch
             {
-                Name = "Grach 2-1",
-                Latitude = CaucasusScenarioData.Airbases.Kobuleti.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Kobuleti.Longitude,
-                Heading = 180,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 100,
-                VisionRangeMeters = 5000,
-                Capacity = 1
-            });
+                UnitCategory.AIRPLANE => CreateAircraft(dto),
+                UnitCategory.HELICOPTER => CreateHelicopter(dto),
+                UnitCategory.GROUND_UNIT => CreateGroundUnit(dto),
+                UnitCategory.SHIP => CreateShip(dto),
+                UnitCategory.STRUCTURE => CreateStructure(dto),
+                _ => throw new NotSupportedException($"Unsupported unit category: {category}")
+            };
 
-            // Kutaisi - Recon UAV
-            units.Add(new Aircraft(AirplaneSubcategory.UAV)
-            {
-                Name = "Eye-1",
-                Latitude = CaucasusScenarioData.Airbases.Kutaisi.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Kutaisi.Longitude,
-                Heading = 45,
-                Airspeed = 80,
-                Status = UnitStatus.Moving,
-                FactionId = 1,
-                Health = 50,
-                VisionRangeMeters = 12000,
-                Capacity = 0
-            });
+            // Set common properties
+            unit.Name = dto.Name;
+            unit.Latitude = dto.Latitude;
+            unit.Longitude = dto.Longitude;
+            unit.Heading = dto.Heading;
+            unit.Status = status;
+            unit.FactionId = dto.FactionId;
+            unit.Health = dto.Health;
+            unit.VisionRangeMeters = dto.VisionRangeMeters;
 
-            // Senaki - Transport helicopter
-            units.Add(new Helicopter(HelicopterSubcategory.TransportHelicopter)
-            {
-                Name = "Dustoff 3-1",
-                Latitude = CaucasusScenarioData.Airbases.SenakiKolkhi.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.SenakiKolkhi.Longitude,
-                Heading = 270,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 80,
-                VisionRangeMeters = 3000
-            });
+            // Set speed based on unit type
+            SetUnitSpeed(unit, dto.Speed);
 
-            return units;
+            return unit;
         }
 
-        private List<Unit> CreateBlueGroundForces()
+        private Aircraft CreateAircraft(UnitDefinitionDto dto)
         {
-            var units = new List<Unit>();
-
-            // Batumi City - Infantry
-            units.Add(new Infantry()
+            if (!Enum.TryParse<AirplaneSubcategory>(dto.Subcategory, true, out var subcat))
             {
-                Name = "1st Rifle Platoon",
-                Latitude = CaucasusScenarioData.Cities.BatumiCity.Latitude,
-                Longitude = CaucasusScenarioData.Cities.BatumiCity.Longitude,
-                Heading = 0,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 100,
-                VisionRangeMeters = 800,
-                Strength = 30
-            });
+                subcat = AirplaneSubcategory.Fighter;
+            }
 
-            // Gori - Main Battle Tanks
-            units.Add(new Vehicle(GroundUnitSubcategory.MainBattleTank)
+            var aircraft = new Aircraft(subcat);
+
+            if (dto.Properties.TryGetValue("capacity", out var capacityObj) && capacityObj != null)
             {
-                Name = "Tank Platoon Alpha",
-                Latitude = CaucasusScenarioData.Cities.Gori.Latitude,
-                Longitude = CaucasusScenarioData.Cities.Gori.Longitude,
-                Heading = 45,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 150,
-                VisionRangeMeters = 3000,
-                Crew = 4
-            });
+                aircraft.Capacity = Convert.ToInt32(capacityObj);
+            }
 
-            // Tbilisi - SAM Long Range
-            units.Add(new Vehicle(GroundUnitSubcategory.SAMLongRange)
-            {
-                Name = "Patriot Battery 1",
-                Latitude = CaucasusScenarioData.Cities.TbilisiCity.Latitude,
-                Longitude = CaucasusScenarioData.Cities.TbilisiCity.Longitude,
-                Heading = 180,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 120,
-                VisionRangeMeters = 15000,
-                Crew = 6
-            });
-
-            // Poti - AAA
-            units.Add(new Vehicle(GroundUnitSubcategory.AAA)
-            {
-                Name = "Shilka Defense 2",
-                Latitude = CaucasusScenarioData.Cities.Poti.Latitude,
-                Longitude = CaucasusScenarioData.Cities.Poti.Longitude,
-                Heading = 90,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 100,
-                VisionRangeMeters = 5000,
-                Crew = 4
-            });
-
-            return units;
+            return aircraft;
         }
 
-        private List<Unit> CreateBlueNavalForces()
+        private Helicopter CreateHelicopter(UnitDefinitionDto dto)
         {
-            var units = new List<Unit>();
-
-            // Batumi Port - Frigate
-            units.Add(new Ship(ShipSubcategory.Frigate)
+            if (!Enum.TryParse<HelicopterSubcategory>(dto.Subcategory, true, out var subcat))
             {
-                Name = "GNS Dioskuria",
-                Latitude = CaucasusScenarioData.NavalZones.BatumiPort.Latitude,
-                Longitude = CaucasusScenarioData.NavalZones.BatumiPort.Longitude,
-                Heading = 270,
-                SpeedKnots = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 200,
-                VisionRangeMeters = 10000,
-                Crew = 150
-            });
+                subcat = HelicopterSubcategory.UtilityHelicopter;
+            }
 
-            // Poti Port - Patrol Boat
-            units.Add(new Ship(ShipSubcategory.PatrolBoat)
-            {
-                Name = "PB-201",
-                Latitude = CaucasusScenarioData.NavalZones.PotiPort.Latitude,
-                Longitude = CaucasusScenarioData.NavalZones.PotiPort.Longitude,
-                Heading = 180,
-                SpeedKnots = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 80,
-                VisionRangeMeters = 6000,
-                Crew = 25
-            });
-
-            return units;
+            return new Helicopter(subcat);
         }
 
-        private List<Unit> CreateBlueStructures()
+        private Unit CreateGroundUnit(UnitDefinitionDto dto)
         {
-            var units = new List<Unit>();
-
-            // Batumi - Radar Tower
-            units.Add(new Structure(StructureSubcategory.RadarTower)
+            if (dto.Subcategory.Equals("Infantry", StringComparison.OrdinalIgnoreCase))
             {
-                Name = "Batumi ATC Radar",
-                Latitude = CaucasusScenarioData.Airbases.Batumi.Latitude + 0.01,
-                Longitude = CaucasusScenarioData.Airbases.Batumi.Longitude + 0.01,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 150,
-                VisionRangeMeters = 20000
-            });
+                var infantry = new Infantry();
+                if (dto.Properties.TryGetValue("strength", out var strengthObj) && strengthObj != null)
+                {
+                    infantry.Strength = Convert.ToInt32(strengthObj);
+                }
+                return infantry;
+            }
 
-            // Kutaisi - Hangar
-            units.Add(new Structure(StructureSubcategory.Hangar)
+            if (!Enum.TryParse<GroundUnitSubcategory>(dto.Subcategory, true, out var subcat))
             {
-                Name = "Kutaisi Hangar 1",
-                Latitude = CaucasusScenarioData.Airbases.Kutaisi.Latitude - 0.005,
-                Longitude = CaucasusScenarioData.Airbases.Kutaisi.Longitude + 0.005,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 200,
-                VisionRangeMeters = 500
-            });
+                subcat = GroundUnitSubcategory.ReconVehicle;
+            }
 
-            // Tbilisi - Command Bunker
-            units.Add(new Structure(StructureSubcategory.CommandBunker)
+            var vehicle = new Vehicle(subcat);
+            if (dto.Properties.TryGetValue("crew", out var crewObj) && crewObj != null)
             {
-                Name = "Tbilisi Command Center",
-                Latitude = CaucasusScenarioData.Cities.TbilisiCity.Latitude,
-                Longitude = CaucasusScenarioData.Cities.TbilisiCity.Longitude + 0.02,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 1,
-                Health = 300,
-                VisionRangeMeters = 5000
-            });
+                vehicle.Crew = Convert.ToInt32(crewObj);
+            }
 
-            return units;
+            return vehicle;
         }
 
-        private List<Unit> CreateRedAirForces()
+        private Ship CreateShip(UnitDefinitionDto dto)
         {
-            var units = new List<Unit>();
-
-            // Anapa - Su-27 Interceptors
-            units.Add(new Aircraft(AirplaneSubcategory.Interceptor)
+            if (!Enum.TryParse<ShipSubcategory>(dto.Subcategory, true, out var subcat))
             {
-                Name = "Flanker 1-1",
-                Latitude = CaucasusScenarioData.Airbases.Anapa.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Anapa.Longitude,
-                Heading = 180,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 100,
-                VisionRangeMeters = 10000,
-                Capacity = 1
-            });
+                subcat = ShipSubcategory.Frigate;
+            }
 
-            units.Add(new Aircraft(AirplaneSubcategory.Interceptor)
+            var ship = new Ship(subcat);
+            if (dto.Properties.TryGetValue("crew", out var crewObj) && crewObj != null)
             {
-                Name = "Flanker 1-2",
-                Latitude = CaucasusScenarioData.Airbases.Anapa.Latitude + 0.003,
-                Longitude = CaucasusScenarioData.Airbases.Anapa.Longitude,
-                Heading = 180,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 100,
-                VisionRangeMeters = 10000,
-                Capacity = 1
-            });
+                ship.Crew = Convert.ToInt32(crewObj);
+            }
 
-            // Mozdok - Su-25 Ground Attack
-            units.Add(new Aircraft(AirplaneSubcategory.Attack)
-            {
-                Name = "Frogfoot 2-1",
-                Latitude = CaucasusScenarioData.Airbases.Mozdok.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Mozdok.Longitude,
-                Heading = 270,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 100,
-                VisionRangeMeters = 5000,
-                Capacity = 1
-            });
-
-            // Mineralnye - AWACS
-            units.Add(new Aircraft(AirplaneSubcategory.AWACS)
-            {
-                Name = "Mainstay 3-1",
-                Latitude = CaucasusScenarioData.Airbases.Mineralnye.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Mineralnye.Longitude + 0.5,
-                Heading = 90,
-                Airspeed = 450,
-                Status = UnitStatus.Moving,
-                FactionId = 2,
-                Health = 120,
-                VisionRangeMeters = 50000,
-                Capacity = 10
-            });
-
-            // Gudauta - Attack Helicopter
-            units.Add(new Helicopter(HelicopterSubcategory.AttackHelicopter)
-            {
-                Name = "Havoc 4-1",
-                Latitude = CaucasusScenarioData.Airbases.Gudauta.Latitude,
-                Longitude = CaucasusScenarioData.Airbases.Gudauta.Longitude,
-                Heading = 90,
-                Airspeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 90,
-                VisionRangeMeters = 4000
-            });
-
-            return units;
+            return ship;
         }
 
-        private List<Unit> CreateRedGroundForces()
+        private Structure CreateStructure(UnitDefinitionDto dto)
         {
-            var units = new List<Unit>();
-
-            // Sukhumi - Infantry
-            units.Add(new Infantry()
+            if (!Enum.TryParse<StructureSubcategory>(dto.Subcategory, true, out var subcat))
             {
-                Name = "VDV Airborne Company",
-                Latitude = CaucasusScenarioData.Cities.Sukhumi.Latitude,
-                Longitude = CaucasusScenarioData.Cities.Sukhumi.Longitude,
-                Heading = 180,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 100,
-                VisionRangeMeters = 1000,
-                Strength = 80
-            });
+                subcat = StructureSubcategory.MilitaryBuilding;
+            }
 
-            // Vladikavkaz - Main Battle Tanks
-            units.Add(new Vehicle(GroundUnitSubcategory.MainBattleTank)
-            {
-                Name = "T-90 Platoon Bravo",
-                Latitude = CaucasusScenarioData.Cities.Vladikavkaz.Latitude,
-                Longitude = CaucasusScenarioData.Cities.Vladikavkaz.Longitude,
-                Heading = 270,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 180,
-                VisionRangeMeters = 3500,
-                Crew = 3
-            });
-
-            // Mozdok - SAM Long Range
-            units.Add(new Vehicle(GroundUnitSubcategory.SAMLongRange)
-            {
-                Name = "S-300 Battery 5",
-                Latitude = CaucasusScenarioData.Airbases.Mozdok.Latitude + 0.02,
-                Longitude = CaucasusScenarioData.Airbases.Mozdok.Longitude,
-                Heading = 180,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 150,
-                VisionRangeMeters = 18000,
-                Crew = 8
-            });
-
-            // Gelendzhik - MLRS
-            units.Add(new Vehicle(GroundUnitSubcategory.MLRS)
-            {
-                Name = "Smerch Battery 1",
-                Latitude = CaucasusScenarioData.Airbases.Gelendzhik.Latitude - 0.03,
-                Longitude = CaucasusScenarioData.Airbases.Gelendzhik.Longitude,
-                Heading = 225,
-                GroundSpeed = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 100,
-                VisionRangeMeters = 2000,
-                Crew = 6
-            });
-
-            return units;
+            return new Structure(subcat);
         }
 
-        private List<Unit> CreateRedNavalForces()
+        private void SetUnitSpeed(Unit unit, double speed)
         {
-            var units = new List<Unit>();
-
-            // Novorossiysk - Destroyer
-            units.Add(new Ship(ShipSubcategory.Destroyer)
+            switch (unit)
             {
-                Name = "RFS Smetlivy",
-                Latitude = CaucasusScenarioData.NavalZones.NovorossiyskPort.Latitude,
-                Longitude = CaucasusScenarioData.NavalZones.NovorossiyskPort.Longitude,
-                Heading = 90,
-                SpeedKnots = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 250,
-                VisionRangeMeters = 12000,
-                Crew = 280
-            });
-
-            // Tuapse - Corvette
-            units.Add(new Ship(ShipSubcategory.Corvette)
-            {
-                Name = "RFS Merkury",
-                Latitude = CaucasusScenarioData.NavalZones.TuapsePort.Latitude,
-                Longitude = CaucasusScenarioData.NavalZones.TuapsePort.Longitude,
-                Heading = 180,
-                SpeedKnots = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 150,
-                VisionRangeMeters = 8000,
-                Crew = 60
-            });
-
-            // Sochi - Submarine
-            units.Add(new Ship(ShipSubcategory.Submarine)
-            {
-                Name = "RFS Kilo-636",
-                Latitude = CaucasusScenarioData.NavalZones.SochiPort.Latitude - 0.05,
-                Longitude = CaucasusScenarioData.NavalZones.SochiPort.Longitude,
-                Heading = 270,
-                SpeedKnots = 5,
-                Status = UnitStatus.Moving,
-                FactionId = 2,
-                Health = 120,
-                VisionRangeMeters = 15000,
-                Crew = 52
-            });
-
-            return units;
+                case LandUnit lu:
+                    lu.GroundSpeed = speed;
+                    break;
+                case AirUnit au:
+                    au.Airspeed = speed;
+                    break;
+                case SeaUnit su:
+                    // JSON has m/s, convert to knots
+                    su.SpeedKnots = speed / 0.514444;
+                    break;
+            }
         }
 
-        private List<Unit> CreateRedStructures()
+        private double GetUnitSpeed(Unit unit)
         {
-            var units = new List<Unit>();
-
-            // Anapa - EWR Radar
-            units.Add(new Structure(StructureSubcategory.RadarTower)
+            return unit switch
             {
-                Name = "Anapa Early Warning Radar",
-                Latitude = CaucasusScenarioData.Airbases.Anapa.Latitude + 0.015,
-                Longitude = CaucasusScenarioData.Airbases.Anapa.Longitude + 0.01,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 180,
-                VisionRangeMeters = 30000
-            });
+                LandUnit lu => lu.GroundSpeed ?? 0,
+                AirUnit au => au.Airspeed ?? 0,
+                SeaUnit su => (su.SpeedKnots ?? 0) * 0.514444, // knots to m/s
+                _ => 0
+            };
+        }
 
-            // Mozdok - Hardened Aircraft Shelter
-            units.Add(new Structure(StructureSubcategory.HardenedAircraftShelter)
+        private Dictionary<string, object> ExtractUnitProperties(Unit unit)
+        {
+            var props = new Dictionary<string, object>();
+
+            switch (unit)
             {
-                Name = "Mozdok HAS-3",
-                Latitude = CaucasusScenarioData.Airbases.Mozdok.Latitude - 0.01,
-                Longitude = CaucasusScenarioData.Airbases.Mozdok.Longitude + 0.008,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 350,
-                VisionRangeMeters = 200
-            });
+                case Aircraft a:
+                    if (a.Capacity.HasValue) props["capacity"] = a.Capacity.Value;
+                    break;
+                case Infantry i:
+                    if (i.Strength.HasValue) props["strength"] = i.Strength.Value;
+                    break;
+                case Vehicle v:
+                    if (v.Crew.HasValue) props["crew"] = v.Crew.Value;
+                    break;
+                case Ship s:
+                    if (s.Crew.HasValue) props["crew"] = s.Crew.Value;
+                    break;
+            }
 
-            // Sochi - Communication Tower
-            units.Add(new Structure(StructureSubcategory.CommunicationTower)
-            {
-                Name = "Sochi Comms Relay",
-                Latitude = CaucasusScenarioData.Cities.Sochi.Latitude + 0.02,
-                Longitude = CaucasusScenarioData.Cities.Sochi.Longitude,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 100,
-                VisionRangeMeters = 8000
-            });
+            return props;
+        }
 
-            // Beslan - Static SAM
-            units.Add(new Structure(StructureSubcategory.StaticSAM)
-            {
-                Name = "Beslan SA-6 Site",
-                Latitude = CaucasusScenarioData.Airbases.Beslan.Latitude + 0.02,
-                Longitude = CaucasusScenarioData.Airbases.Beslan.Longitude - 0.01,
-                Heading = 0,
-                Status = UnitStatus.Idle,
-                FactionId = 2,
-                Health = 200,
-                VisionRangeMeters = 12000
-            });
-
-            return units;
+        /// <summary>
+        /// Loads default Caucasus scenario from embedded JSON file
+        /// </summary>
+        public WorldState CreateCaucasusScenario()
+        {
+            var scenarioPath = Path.Combine("Data", "Scenarios", "caucasus-default.json");
+            return LoadScenarioFromFile(scenarioPath);
         }
     }
 }

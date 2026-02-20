@@ -1,5 +1,3 @@
-using WarSim.Domain;
-
 namespace WarSim.Data
 {
     /// <summary>
