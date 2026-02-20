@@ -1,9 +1,8 @@
-using WarSim.Domain;
-using WarSim.Domain.Units;
-using WarSim.Domain.Projectiles;
-using WarSim.DTOs;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
+using WarSim.Domain;
+using WarSim.Domain.Projectiles;
+using WarSim.Domain.Units;
+using WarSim.DTOs;
 
 namespace WarSim.Services
 {
@@ -249,16 +248,32 @@ namespace WarSim.Services
             switch (unit)
             {
                 case Aircraft a:
-                    if (a.Capacity.HasValue) props["capacity"] = a.Capacity.Value;
+                    if (a.Capacity.HasValue)
+                    {
+                        props["capacity"] = a.Capacity.Value;
+                    }
+
                     break;
                 case Infantry i:
-                    if (i.Strength.HasValue) props["strength"] = i.Strength.Value;
+                    if (i.Strength.HasValue)
+                    {
+                        props["strength"] = i.Strength.Value;
+                    }
+
                     break;
                 case Vehicle v:
-                    if (v.Crew.HasValue) props["crew"] = v.Crew.Value;
+                    if (v.Crew.HasValue)
+                    {
+                        props["crew"] = v.Crew.Value;
+                    }
+
                     break;
                 case Ship s:
-                    if (s.Crew.HasValue) props["crew"] = s.Crew.Value;
+                    if (s.Crew.HasValue)
+                    {
+                        props["crew"] = s.Crew.Value;
+                    }
+
                     break;
             }
 

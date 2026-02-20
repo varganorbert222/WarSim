@@ -35,16 +35,28 @@ namespace WarSim.DTOs
     public class MapBoundsDto
     {
         [JsonPropertyName("minLatitude")]
-        public double MinLatitude { get; set; }
+        public double MinLatitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("maxLatitude")]
-        public double MaxLatitude { get; set; }
+        public double MaxLatitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("minLongitude")]
-        public double MinLongitude { get; set; }
+        public double MinLongitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("maxLongitude")]
-        public double MaxLongitude { get; set; }
+        public double MaxLongitude
+        {
+            get; set;
+        }
     }
 
     public class ScenarioLocationDto
@@ -53,10 +65,16 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("faction")]
         public string Faction { get; set; } = string.Empty;
@@ -65,7 +83,10 @@ namespace WarSim.DTOs
     public class FactionDefinitionDto
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public int Id
+        {
+            get; set;
+        }
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
@@ -89,22 +110,37 @@ namespace WarSim.DTOs
         public string Subcategory { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("heading")]
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         [JsonPropertyName("speed")]
-        public double Speed { get; set; }
+        public double Speed
+        {
+            get; set;
+        }
 
         [JsonPropertyName("status")]
         public string Status { get; set; } = "Idle";
 
         [JsonPropertyName("factionId")]
-        public int FactionId { get; set; }
+        public int FactionId
+        {
+            get; set;
+        }
 
         [JsonPropertyName("health")]
         public double Health { get; set; } = 100.0;
