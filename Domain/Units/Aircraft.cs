@@ -2,11 +2,6 @@ namespace WarSim.Domain.Units
 {
     public class Aircraft : AirUnit
     {
-        public AircraftType Type
-        {
-            get; set;
-        }
-
         /// <summary>
         /// Number of crew or capacity (optional).
         /// </summary>
@@ -15,9 +10,12 @@ namespace WarSim.Domain.Units
             get; set;
         }
 
-        public Aircraft(AircraftType type)
+        public Aircraft(AirplaneSubcategory subcategory)
         {
-            Type = type;
+            UnitCategory = UnitCategory.AIRPLANE;
+            Subcategory = subcategory.ToString();
         }
+
+        public Aircraft() : this(AirplaneSubcategory.Fighter) { }
     }
 }

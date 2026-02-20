@@ -1,6 +1,5 @@
 ﻿using WarSim.Domain;
 using WarSim.Domain.Projectiles;
-using WarSim.Domain.Units;
 
 namespace WarSim.Services
 {
@@ -11,46 +10,79 @@ namespace WarSim.Services
     {
         private WorldState _state;
         private readonly ILogger<WorldStateService> _logger;
+        private readonly Simulation.IEntityProcessor _entityProcessor;
 
-        public WorldStateService(ILogger<WorldStateService> logger)
+        public WorldStateService(ILogger<WorldStateService> _logger, Simulation.IEntityProcessor entityProcessor)
         {
-            _logger = logger;
+            this._logger = _logger;
+            _entityProcessor = entityProcessor;
 
-            // Demo units using the new type hierarchy
-            var a1 = new WarSim.Domain.Units.Aircraft(WarSim.Domain.AircraftType.Fighter)
+            // Demo units using the new category hierarchy
+            var a1 = new WarSim.Domain.Units.Aircraft(WarSim.Domain.AirplaneSubcategory.Fighter)
             {
                 Name = "Alpha-1 (Fighter)",
                 Latitude = 47.4979,
                 Longitude = 19.0402,
                 Airspeed = 250.0,
-                Capacity = 1
+                Capacity = 1,
+                FactionId = 1,
+                VisionRangeMeters = 5000.0
             };
-            a1.FactionId = 1;
-            a1.VisionRangeMeters = 5000.0;
 
-            var v1 = new WarSim.Domain.Units.Vehicle(WarSim.Domain.VehicleType.Truck)
+            var h1 = new WarSim.Domain.Units.Helicopter(WarSim.Domain.HelicopterSubcategory.AttackHelicopter)
             {
-                Name = "Bravo-2 (Truck)",
+                Name = "Delta-1 (Attack Heli)",
+                Latitude = 47.49,
+                Longitude = 19.04,
+                Airspeed = 150.0,
+                FactionId = 1,
+                VisionRangeMeters = 3000.0
+            };
+
+            var v1 = new WarSim.Domain.Units.Vehicle(WarSim.Domain.GroundUnitSubcategory.MainBattleTank)
+            {
+                Name = "Bravo-2 (MBT)",
                 Latitude = 47.50,
                 Longitude = 19.05,
                 GroundSpeed = 15.0,
-                Crew = 2
+                Crew = 4,
+                FactionId = 2,
+                VisionRangeMeters = 2000.0
             };
-            v1.FactionId = 2;
-            v1.VisionRangeMeters = 1000.0;
 
-            var s1 = new WarSim.Domain.Units.Ship(WarSim.Domain.ShipType.Frigate)
+            var i1 = new WarSim.Domain.Units.Infantry()
+            {
+                Name = "Echo-1 (Infantry)",
+                Latitude = 47.505,
+                Longitude = 19.055,
+                GroundSpeed = 2.0,
+                Strength = 10,
+                FactionId = 2,
+                VisionRangeMeters = 500.0
+            };
+
+            var s1 = new WarSim.Domain.Units.Ship(WarSim.Domain.ShipSubcategory.Frigate)
             {
                 Name = "Charlie-1 (Frigate)",
                 Latitude = 47.48,
                 Longitude = 19.03,
                 SpeedKnots = 20.0,
-                Crew = 120
+                Crew = 120,
+                FactionId = 1,
+                VisionRangeMeters = 4000.0
             };
-            s1.FactionId = 1;
-            s1.VisionRangeMeters = 4000.0;
 
-            var units = new List<Unit> { a1, v1, s1 };
+            var st1 = new WarSim.Domain.Units.Structure(WarSim.Domain.StructureSubcategory.RadarTower)
+            {
+                Name = "Foxtrot-1 (Radar)",
+                Latitude = 47.51,
+                Longitude = 19.06,
+                FactionId = 1,
+                VisionRangeMeters = 10000.0,
+                Health = 200.0
+            };
+
+            var units = new List<Unit> { a1, h1, v1, i1, s1, st1 };
 
             var projectiles = new List<Projectile>
             {
@@ -112,7 +144,7 @@ namespace WarSim.Services
         public bool MoveUnit(Guid id, double lat, double lon)
         {
             var old = GetSnapshot();
-            var units = old.Units.Select(CloneUnit).ToList();
+            var units = old.Units.Select(u => _entityProcessor.CloneUnit(u)).ToList();
             var idx = units.FindIndex(u => u.Id == id);
             if (idx < 0)
             {
@@ -131,69 +163,6 @@ namespace WarSim.Services
             _logger.LogInformation("Unit {UnitId} moved to {Lat},{Lon} (snapshot)", id, lat, lon);
             WarSim.Logging.ConsoleColorLogger.Log("WorldState", Microsoft.Extensions.Logging.LogLevel.Information, $"Unit {id} moved to {lat:F6},{lon:F6}");
             return true;
-        }
-
-        private static Unit CloneUnit(Unit u)
-        {
-            return u switch
-            {
-                Aircraft a => SetId(new Aircraft(a.Type)
-                {
-                    Name = a.Name,
-                    Latitude = a.Latitude,
-                    Longitude = a.Longitude,
-                    Heading = a.Heading,
-                    Status = a.Status,
-                    MaxAltitude = a.MaxAltitude,
-                    Airspeed = a.Airspeed,
-                    Capacity = a.Capacity
-                }, a.Id),
-                Helicopter h => SetId(new Helicopter()
-                {
-                    Name = h.Name,
-                    Latitude = h.Latitude,
-                    Longitude = h.Longitude,
-                    Heading = h.Heading,
-                    Status = h.Status,
-                    Airspeed = h.Airspeed
-                }, h.Id),
-                Vehicle v => SetId(new Vehicle(v.Type)
-                {
-                    Name = v.Name,
-                    Latitude = v.Latitude,
-                    Longitude = v.Longitude,
-                    Heading = v.Heading,
-                    Status = v.Status,
-                    GroundSpeed = v.GroundSpeed,
-                    Crew = v.Crew
-                }, v.Id),
-                Infantry i => SetId(new Infantry()
-                {
-                    Name = i.Name,
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Heading = i.Heading,
-                    Status = i.Status,
-                    Strength = i.Strength
-                }, i.Id),
-                Ship s => SetId(new Ship(s.Type)
-                {
-                    Name = s.Name,
-                    Latitude = s.Latitude,
-                    Longitude = s.Longitude,
-                    Heading = s.Heading,
-                    Status = s.Status,
-                    SpeedKnots = s.SpeedKnots,
-                    Crew = s.Crew
-                }, s.Id),
-                _ => throw new NotSupportedException($"Cloning unit type {u.GetType()} not supported")
-            };
-
-            static T SetId<T>(T obj, Guid id) where T : Unit
-            {
-                obj.Id = id;
-                return obj;
-            }
         }
     }
 

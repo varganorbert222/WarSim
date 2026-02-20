@@ -2,19 +2,17 @@ namespace WarSim.Domain.Units
 {
     public class Vehicle : LandUnit
     {
-        public VehicleType Type
-        {
-            get; set;
-        }
-
         public int? Crew
         {
             get; set;
         }
 
-        public Vehicle(VehicleType type)
+        public Vehicle(GroundUnitSubcategory subcategory)
         {
-            Type = type;
+            UnitCategory = UnitCategory.GROUND_UNIT;
+            Subcategory = subcategory.ToString();
         }
+
+        public Vehicle() : this(GroundUnitSubcategory.ReconVehicle) { }
     }
 }

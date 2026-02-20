@@ -11,13 +11,17 @@ namespace WarSim.Simulation
         {
             if (u is Aircraft a)
             {
-                var n = new Aircraft(a.Type)
+                var subcat = a.GetSubcategory<AirplaneSubcategory>() ?? AirplaneSubcategory.Fighter;
+                var n = new Aircraft(subcat)
                 {
                     Name = a.Name,
                     Latitude = a.Latitude,
                     Longitude = a.Longitude,
                     Heading = a.Heading,
                     Status = a.Status,
+                    Health = a.Health,
+                    FactionId = a.FactionId,
+                    VisionRangeMeters = a.VisionRangeMeters,
                     MaxAltitude = a.MaxAltitude,
                     Airspeed = a.Airspeed,
                     Capacity = a.Capacity
@@ -28,32 +32,20 @@ namespace WarSim.Simulation
 
             if (u is Helicopter h)
             {
-                var n = new Helicopter()
+                var subcat = h.GetSubcategory<HelicopterSubcategory>() ?? HelicopterSubcategory.UtilityHelicopter;
+                var n = new Helicopter(subcat)
                 {
                     Name = h.Name,
                     Latitude = h.Latitude,
                     Longitude = h.Longitude,
                     Heading = h.Heading,
                     Status = h.Status,
+                    Health = h.Health,
+                    FactionId = h.FactionId,
+                    VisionRangeMeters = h.VisionRangeMeters,
                     Airspeed = h.Airspeed
                 };
                 n.Id = h.Id;
-                return n;
-            }
-
-            if (u is Vehicle v)
-            {
-                var n = new Vehicle(v.Type)
-                {
-                    Name = v.Name,
-                    Latitude = v.Latitude,
-                    Longitude = v.Longitude,
-                    Heading = v.Heading,
-                    Status = v.Status,
-                    GroundSpeed = v.GroundSpeed,
-                    Crew = v.Crew
-                };
-                n.Id = v.Id;
                 return n;
             }
 
@@ -66,25 +58,71 @@ namespace WarSim.Simulation
                     Longitude = i.Longitude,
                     Heading = i.Heading,
                     Status = i.Status,
-                    Strength = i.Strength
+                    Health = i.Health,
+                    FactionId = i.FactionId,
+                    VisionRangeMeters = i.VisionRangeMeters,
+                    Strength = i.Strength,
+                    GroundSpeed = i.GroundSpeed
                 };
                 n.Id = i.Id;
                 return n;
             }
 
+            if (u is Vehicle v)
+            {
+                var subcat = v.GetSubcategory<GroundUnitSubcategory>() ?? GroundUnitSubcategory.ReconVehicle;
+                var n = new Vehicle(subcat)
+                {
+                    Name = v.Name,
+                    Latitude = v.Latitude,
+                    Longitude = v.Longitude,
+                    Heading = v.Heading,
+                    Status = v.Status,
+                    Health = v.Health,
+                    FactionId = v.FactionId,
+                    VisionRangeMeters = v.VisionRangeMeters,
+                    GroundSpeed = v.GroundSpeed,
+                    Crew = v.Crew
+                };
+                n.Id = v.Id;
+                return n;
+            }
+
             if (u is Ship s)
             {
-                var n = new Ship(s.Type)
+                var subcat = s.GetSubcategory<ShipSubcategory>() ?? ShipSubcategory.Frigate;
+                var n = new Ship(subcat)
                 {
                     Name = s.Name,
                     Latitude = s.Latitude,
                     Longitude = s.Longitude,
                     Heading = s.Heading,
                     Status = s.Status,
+                    Health = s.Health,
+                    FactionId = s.FactionId,
+                    VisionRangeMeters = s.VisionRangeMeters,
                     SpeedKnots = s.SpeedKnots,
                     Crew = s.Crew
                 };
                 n.Id = s.Id;
+                return n;
+            }
+
+            if (u is Structure st)
+            {
+                var subcat = st.GetSubcategory<StructureSubcategory>() ?? StructureSubcategory.MilitaryBuilding;
+                var n = new Structure(subcat)
+                {
+                    Name = st.Name,
+                    Latitude = st.Latitude,
+                    Longitude = st.Longitude,
+                    Heading = st.Heading,
+                    Status = st.Status,
+                    Health = st.Health,
+                    FactionId = st.FactionId,
+                    VisionRangeMeters = st.VisionRangeMeters
+                };
+                n.Id = st.Id;
                 return n;
             }
 

@@ -61,9 +61,33 @@
         public double VisionRangeMeters { get; set; } = 2000.0;
 
         /// <summary>
+        /// Main category of the unit (AIRPLANE, HELICOPTER, GROUND_UNIT, SHIP, STRUCTURE).
+        /// </summary>
+        public UnitCategory UnitCategory
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Subcategory stored as string to accommodate all enum types.
+        /// Use GetSubcategory<T>() helper to parse to specific enum.
+        /// </summary>
+        public string Subcategory { get; set; } = string.Empty;
+
+        public T? GetSubcategory<T>() where T : struct, Enum
+        {
+            if (string.IsNullOrEmpty(Subcategory))
+            {
+                return null;
+            }
+
+            return Enum.TryParse<T>(Subcategory, true, out var result) ? result : null;
+        }
+
+        /// <summary>
         /// Category string for easier filtering in UIs (e.g. "Air", "Land", "Sea").
         /// Subclasses can override to provide a more specific value.
         /// </summary>
-        public virtual string Category => "Generic";
+        public virtual string Category => UnitCategory.ToString();
     }
 }

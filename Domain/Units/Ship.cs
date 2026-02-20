@@ -2,19 +2,17 @@ namespace WarSim.Domain.Units
 {
     public class Ship : SeaUnit
     {
-        public ShipType Type
-        {
-            get; set;
-        }
-
         public int? Crew
         {
             get; set;
         }
 
-        public Ship(ShipType type)
+        public Ship(ShipSubcategory subcategory)
         {
-            Type = type;
+            UnitCategory = UnitCategory.SHIP;
+            Subcategory = subcategory.ToString();
         }
+
+        public Ship() : this(ShipSubcategory.Frigate) { }
     }
 }

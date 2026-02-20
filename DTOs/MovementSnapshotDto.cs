@@ -25,6 +25,8 @@ namespace WarSim.DTOs
             get; set;
         }
         public string Name { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string Subcategory { get; set; } = string.Empty;
         public double Latitude
         {
             get; set;

@@ -56,6 +56,8 @@ namespace WarSim.Controllers
             {
                 Id = u.Id,
                 Name = u.Name,
+                Category = u.UnitCategory.ToString(),
+                Subcategory = u.Subcategory,
                 Latitude = u.Latitude,
                 Longitude = u.Longitude,
                 Heading = u.Heading,

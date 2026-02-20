@@ -10,6 +10,10 @@ namespace WarSim.Domain.Units
             get; set;
         }
 
-        public string UnitRole { get; set; } = "Infantry";
+        public Infantry()
+        {
+            UnitCategory = UnitCategory.GROUND_UNIT;
+            Subcategory = GroundUnitSubcategory.Infantry.ToString();
+        }
     }
 }

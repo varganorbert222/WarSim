@@ -2,10 +2,12 @@ namespace WarSim.Domain.Units
 {
     public class Helicopter : AirUnit
     {
-        public string Role { get; set; } = string.Empty; // e.g., transport, attack, recon
-
-        public Helicopter()
+        public Helicopter(HelicopterSubcategory subcategory)
         {
+            UnitCategory = UnitCategory.HELICOPTER;
+            Subcategory = subcategory.ToString();
         }
+
+        public Helicopter() : this(HelicopterSubcategory.UtilityHelicopter) { }
     }
 }
