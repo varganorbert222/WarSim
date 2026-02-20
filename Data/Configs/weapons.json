@@ -1,0 +1,218 @@
+{
+  "weapons": [
+    {
+      "id": "cannon_20mm",
+      "name": "20mm Autocannon",
+      "projectileType": "Bullet",
+      "damage": 15.0,
+      "range": 2000.0,
+      "projectileSpeed": 800.0,
+      "rateOfFire": 10.0,
+      "magazineSize": 200,
+      "totalAmmo": 600,
+      "reloadTime": 5.0
+    },
+    {
+      "id": "gun_30mm",
+      "name": "30mm Cannon",
+      "projectileType": "Bullet",
+      "damage": 25.0,
+      "range": 3000.0,
+      "projectileSpeed": 900.0,
+      "rateOfFire": 8.0,
+      "magazineSize": 150,
+      "totalAmmo": 450,
+      "reloadTime": 6.0
+    },
+    {
+      "id": "tank_cannon_125mm",
+      "name": "125mm Tank Cannon",
+      "projectileType": "Shell",
+      "damage": 80.0,
+      "range": 5000.0,
+      "projectileSpeed": 1700.0,
+      "rateOfFire": 0.15,
+      "magazineSize": 1,
+      "totalAmmo": 40,
+      "reloadTime": 8.0
+    },
+    {
+      "id": "artillery_155mm",
+      "name": "155mm Howitzer",
+      "projectileType": "Shell",
+      "damage": 120.0,
+      "range": 15000.0,
+      "projectileSpeed": 800.0,
+      "rateOfFire": 0.1,
+      "magazineSize": 1,
+      "totalAmmo": 30,
+      "reloadTime": 12.0
+    },
+    {
+      "id": "missile_aa_short",
+      "name": "Short Range AA Missile",
+      "projectileType": "Missile",
+      "damage": 50.0,
+      "range": 8000.0,
+      "projectileSpeed": 600.0,
+      "rateOfFire": 0.2,
+      "magazineSize": 1,
+      "totalAmmo": 8,
+      "reloadTime": 10.0
+    },
+    {
+      "id": "missile_aa_long",
+      "name": "Long Range AA Missile",
+      "projectileType": "Missile",
+      "damage": 70.0,
+      "range": 50000.0,
+      "projectileSpeed": 1200.0,
+      "rateOfFire": 0.1,
+      "magazineSize": 1,
+      "totalAmmo": 6,
+      "reloadTime": 15.0
+    },
+    {
+      "id": "missile_antiship",
+      "name": "Anti-Ship Missile",
+      "projectileType": "Missile",
+      "damage": 200.0,
+      "range": 120000.0,
+      "projectileSpeed": 250.0,
+      "rateOfFire": 0.05,
+      "magazineSize": 1,
+      "totalAmmo": 4,
+      "reloadTime": 30.0
+    },
+    {
+      "id": "rifle_762mm",
+      "name": "7.62mm Rifle",
+      "projectileType": "Bullet",
+      "damage": 8.0,
+      "range": 600.0,
+      "projectileSpeed": 800.0,
+      "rateOfFire": 1.5,
+      "magazineSize": 30,
+      "totalAmmo": 240,
+      "reloadTime": 3.0
+    },
+    {
+      "id": "naval_76mm",
+      "name": "76mm Naval Gun",
+      "projectileType": "Shell",
+      "damage": 60.0,
+      "range": 10000.0,
+      "projectileSpeed": 900.0,
+      "rateOfFire": 1.0,
+      "magazineSize": 1,
+      "totalAmmo": 200,
+      "reloadTime": 1.5
+    },
+    {
+      "id": "mlrs_rocket",
+      "name": "MLRS Rocket",
+      "projectileType": "Missile",
+      "damage": 150.0,
+      "range": 70000.0,
+      "projectileSpeed": 600.0,
+      "rateOfFire": 0.5,
+      "magazineSize": 12,
+      "totalAmmo": 12,
+      "reloadTime": 60.0
+    }
+  ],
+  "loadouts": [
+    {
+      "unitCategory": "AIRPLANE",
+      "unitSubcategory": "Fighter",
+      "weapons": [
+        { "weaponId": "cannon_20mm", "count": 1 },
+        { "weaponId": "missile_aa_short", "count": 4 }
+      ]
+    },
+    {
+      "unitCategory": "AIRPLANE",
+      "unitSubcategory": "Interceptor",
+      "weapons": [
+        { "weaponId": "cannon_30mm", "count": 1 },
+        { "weaponId": "missile_aa_long", "count": 6 }
+      ]
+    },
+    {
+      "unitCategory": "AIRPLANE",
+      "unitSubcategory": "Attack",
+      "weapons": [
+        { "weaponId": "gun_30mm", "count": 1 },
+        { "weaponId": "missile_aa_short", "count": 2 }
+      ]
+    },
+    {
+      "unitCategory": "HELICOPTER",
+      "unitSubcategory": "AttackHelicopter",
+      "weapons": [
+        { "weaponId": "cannon_20mm", "count": 1 },
+        { "weaponId": "missile_aa_short", "count": 4 }
+      ]
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "MainBattleTank",
+      "weapons": [
+        { "weaponId": "tank_cannon_125mm", "count": 1 }
+      ]
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "Infantry",
+      "weapons": [
+        { "weaponId": "rifle_762mm", "count": 1 }
+      ]
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "SAMLongRange",
+      "weapons": [
+        { "weaponId": "missile_aa_long", "count": 4 }
+      ]
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "AAA",
+      "weapons": [
+        { "weaponId": "gun_30mm", "count": 2 }
+      ]
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "MLRS",
+      "weapons": [
+        { "weaponId": "mlrs_rocket", "count": 1 }
+      ]
+    },
+    {
+      "unitCategory": "SHIP",
+      "unitSubcategory": "Frigate",
+      "weapons": [
+        { "weaponId": "naval_76mm", "count": 1 },
+        { "weaponId": "missile_antiship", "count": 8 }
+      ]
+    },
+    {
+      "unitCategory": "SHIP",
+      "unitSubcategory": "Destroyer",
+      "weapons": [
+        { "weaponId": "naval_76mm", "count": 2 },
+        { "weaponId": "missile_aa_long", "count": 16 },
+        { "weaponId": "missile_antiship", "count": 8 }
+      ]
+    },
+    {
+      "unitCategory": "SHIP",
+      "unitSubcategory": "Corvette",
+      "weapons": [
+        { "weaponId": "naval_76mm", "count": 1 },
+        { "weaponId": "missile_aa_short", "count": 8 }
+      ]
+    }
+  ]
+}

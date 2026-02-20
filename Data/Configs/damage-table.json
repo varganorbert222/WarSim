@@ -1,0 +1,179 @@
+{
+  "damageMultipliers": [
+    {
+      "projectileType": "Bullet",
+      "targetCategory": "AIRPLANE",
+      "multiplier": 0.3,
+      "description": "Bullets are less effective against aircraft"
+    },
+    {
+      "projectileType": "Bullet",
+      "targetCategory": "HELICOPTER",
+      "multiplier": 0.5,
+      "description": "Bullets moderately effective against helicopters"
+    },
+    {
+      "projectileType": "Bullet",
+      "targetCategory": "GROUND_UNIT",
+      "targetSubcategory": "Infantry",
+      "multiplier": 1.5,
+      "description": "Bullets very effective against infantry"
+    },
+    {
+      "projectileType": "Bullet",
+      "targetCategory": "GROUND_UNIT",
+      "targetSubcategory": "MainBattleTank",
+      "multiplier": 0.1,
+      "description": "Bullets ineffective against tanks"
+    },
+    {
+      "projectileType": "Bullet",
+      "targetCategory": "SHIP",
+      "multiplier": 0.05,
+      "description": "Bullets very ineffective against ships"
+    },
+    {
+      "projectileType": "Bullet",
+      "targetCategory": "STRUCTURE",
+      "multiplier": 0.2,
+      "description": "Bullets weak against structures"
+    },
+    {
+      "projectileType": "Shell",
+      "targetCategory": "AIRPLANE",
+      "multiplier": 0.8,
+      "description": "Shells can damage aircraft if hit"
+    },
+    {
+      "projectileType": "Shell",
+      "targetCategory": "HELICOPTER",
+      "multiplier": 1.2,
+      "description": "Shells effective against helicopters"
+    },
+    {
+      "projectileType": "Shell",
+      "targetCategory": "GROUND_UNIT",
+      "targetSubcategory": "MainBattleTank",
+      "multiplier": 1.5,
+      "description": "Shells very effective against tanks"
+    },
+    {
+      "projectileType": "Shell",
+      "targetCategory": "GROUND_UNIT",
+      "targetSubcategory": "Infantry",
+      "multiplier": 2.0,
+      "description": "Shells devastating against infantry"
+    },
+    {
+      "projectileType": "Shell",
+      "targetCategory": "SHIP",
+      "multiplier": 0.7,
+      "description": "Shells moderately effective against ships"
+    },
+    {
+      "projectileType": "Shell",
+      "targetCategory": "STRUCTURE",
+      "multiplier": 1.3,
+      "description": "Shells effective against structures"
+    },
+    {
+      "projectileType": "Missile",
+      "targetCategory": "AIRPLANE",
+      "multiplier": 2.0,
+      "description": "Missiles very effective against aircraft"
+    },
+    {
+      "projectileType": "Missile",
+      "targetCategory": "HELICOPTER",
+      "multiplier": 1.8,
+      "description": "Missiles very effective against helicopters"
+    },
+    {
+      "projectileType": "Missile",
+      "targetCategory": "GROUND_UNIT",
+      "targetSubcategory": "MainBattleTank",
+      "multiplier": 1.2,
+      "description": "Missiles effective against tanks"
+    },
+    {
+      "projectileType": "Missile",
+      "targetCategory": "GROUND_UNIT",
+      "multiplier": 1.0,
+      "description": "Missiles standard damage to ground units"
+    },
+    {
+      "projectileType": "Missile",
+      "targetCategory": "SHIP",
+      "multiplier": 1.5,
+      "description": "Missiles very effective against ships"
+    },
+    {
+      "projectileType": "Missile",
+      "targetCategory": "STRUCTURE",
+      "multiplier": 1.0,
+      "description": "Missiles standard damage to structures"
+    }
+  ],
+  "armorValues": [
+    {
+      "unitCategory": "AIRPLANE",
+      "unitSubcategory": "Fighter",
+      "armorPoints": 20,
+      "description": "Fighters have light armor"
+    },
+    {
+      "unitCategory": "AIRPLANE",
+      "unitSubcategory": "Attack",
+      "armorPoints": 40,
+      "description": "Attack aircraft have reinforced armor"
+    },
+    {
+      "unitCategory": "HELICOPTER",
+      "unitSubcategory": "AttackHelicopter",
+      "armorPoints": 30,
+      "description": "Attack helicopters have moderate armor"
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "MainBattleTank",
+      "armorPoints": 200,
+      "description": "Tanks have heavy armor"
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "Infantry",
+      "armorPoints": 5,
+      "description": "Infantry minimal protection"
+    },
+    {
+      "unitCategory": "GROUND_UNIT",
+      "unitSubcategory": "SAMLongRange",
+      "armorPoints": 50,
+      "description": "SAM systems have moderate protection"
+    },
+    {
+      "unitCategory": "SHIP",
+      "unitSubcategory": "Destroyer",
+      "armorPoints": 300,
+      "description": "Destroyers have heavy naval armor"
+    },
+    {
+      "unitCategory": "SHIP",
+      "unitSubcategory": "Frigate",
+      "armorPoints": 200,
+      "description": "Frigates have moderate naval armor"
+    },
+    {
+      "unitCategory": "STRUCTURE",
+      "unitSubcategory": "HardenedAircraftShelter",
+      "armorPoints": 500,
+      "description": "Hardened shelters very tough"
+    },
+    {
+      "unitCategory": "STRUCTURE",
+      "unitSubcategory": "RadarTower",
+      "armorPoints": 80,
+      "description": "Radar towers moderately protected"
+    }
+  ]
+}

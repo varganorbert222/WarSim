@@ -5,6 +5,8 @@
         Idle,
         Moving,
         Engaged,
+        InCombat,
+        Retreating,
         Destroyed
     }
 }

@@ -1,0 +1,112 @@
+{
+  "behaviors": [
+    {
+      "unitType": "Fighter",
+      "initialState": "Patrol",
+      "aggressionLevel": 0.9,
+      "engageRange": 8000.0,
+      "retreatHealthThreshold": 0.2,
+      "patrolRadius": 50000.0,
+      "rearmAmmoThreshold": 0.3
+    },
+    {
+      "unitType": "Interceptor",
+      "initialState": "Patrol",
+      "aggressionLevel": 1.0,
+      "engageRange": 50000.0,
+      "retreatHealthThreshold": 0.15,
+      "patrolRadius": 80000.0,
+      "rearmAmmoThreshold": 0.2
+    },
+    {
+      "unitType": "Attack",
+      "initialState": "Patrol",
+      "aggressionLevel": 0.7,
+      "engageRange": 5000.0,
+      "retreatHealthThreshold": 0.25,
+      "patrolRadius": 30000.0,
+      "rearmAmmoThreshold": 0.4
+    },
+    {
+      "unitType": "AttackHelicopter",
+      "initialState": "Patrol",
+      "aggressionLevel": 0.8,
+      "engageRange": 4000.0,
+      "retreatHealthThreshold": 0.3,
+      "patrolRadius": 15000.0,
+      "rearmAmmoThreshold": 0.3
+    },
+    {
+      "unitType": "MainBattleTank",
+      "initialState": "Idle",
+      "aggressionLevel": 0.8,
+      "engageRange": 3500.0,
+      "retreatHealthThreshold": 0.2,
+      "patrolRadius": 5000.0,
+      "rearmAmmoThreshold": 0.1
+    },
+    {
+      "unitType": "Infantry",
+      "initialState": "Idle",
+      "aggressionLevel": 0.6,
+      "engageRange": 600.0,
+      "retreatHealthThreshold": 0.4,
+      "patrolRadius": 1000.0,
+      "rearmAmmoThreshold": 0.3
+    },
+    {
+      "unitType": "SAMLongRange",
+      "initialState": "Idle",
+      "aggressionLevel": 0.9,
+      "engageRange": 50000.0,
+      "retreatHealthThreshold": 0.1,
+      "patrolRadius": 0.0,
+      "rearmAmmoThreshold": 0.2
+    },
+    {
+      "unitType": "AAA",
+      "initialState": "Idle",
+      "aggressionLevel": 0.85,
+      "engageRange": 5000.0,
+      "retreatHealthThreshold": 0.15,
+      "patrolRadius": 0.0,
+      "rearmAmmoThreshold": 0.25
+    },
+    {
+      "unitType": "MLRS",
+      "initialState": "Idle",
+      "aggressionLevel": 0.5,
+      "engageRange": 70000.0,
+      "retreatHealthThreshold": 0.3,
+      "patrolRadius": 0.0,
+      "rearmAmmoThreshold": 0.5
+    },
+    {
+      "unitType": "Frigate",
+      "initialState": "Patrol",
+      "aggressionLevel": 0.7,
+      "engageRange": 10000.0,
+      "retreatHealthThreshold": 0.25,
+      "patrolRadius": 30000.0,
+      "rearmAmmoThreshold": 0.2
+    },
+    {
+      "unitType": "Destroyer",
+      "initialState": "Patrol",
+      "aggressionLevel": 0.9,
+      "engageRange": 120000.0,
+      "retreatHealthThreshold": 0.15,
+      "patrolRadius": 50000.0,
+      "rearmAmmoThreshold": 0.15
+    },
+    {
+      "unitType": "Corvette",
+      "initialState": "Patrol",
+      "aggressionLevel": 0.75,
+      "engageRange": 8000.0,
+      "retreatHealthThreshold": 0.3,
+      "patrolRadius": 20000.0,
+      "rearmAmmoThreshold": 0.25
+    }
+  ]
+}
