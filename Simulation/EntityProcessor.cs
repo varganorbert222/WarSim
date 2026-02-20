@@ -1,4 +1,3 @@
-using System;
 using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 using WarSim.Domain.Units;
@@ -7,6 +6,7 @@ namespace WarSim.Simulation
 {
     public class EntityProcessor : IEntityProcessor
     {
+        private readonly Microsoft.Extensions.Logging.ILogger<EntityProcessor> _logger = null!;
         public Unit CloneUnit(Unit u)
         {
             if (u is Aircraft a)
@@ -160,7 +160,10 @@ namespace WarSim.Simulation
                     break;
             }
 
-            if (speedMps <= 0) return;
+            if (speedMps <= 0)
+            {
+                return;
+            }
 
             var distance = speedMps * deltaSeconds; // meters
             MoveByDistance(unit, distance);
@@ -191,6 +194,6 @@ namespace WarSim.Simulation
             obj.Latitude = lat + dLat;
             obj.Longitude = lon + dLon;
         }
-}
+    }
 
 }

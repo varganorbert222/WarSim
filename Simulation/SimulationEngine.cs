@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 using WarSim.Domain.Units;
+using WarSim.Logging;
 
 namespace WarSim.Simulation
 {
@@ -38,6 +34,8 @@ namespace WarSim.Simulation
             // Get immutable snapshot
             var snapshot = _world.GetSnapshot();
 
+            ConsoleColorLogger.Log("SimulationEngine", LogLevel.Information, $"⏱️ Starting tick {snapshot.Tick} with {snapshot.Units.Count} units and {snapshot.Projectiles.Count} projectiles");
+
             var units = snapshot.Units.Select(u => _processor.CloneUnit(u)).ToList();
             var projectiles = snapshot.Projectiles.Select(p => _processor.CloneProjectile(p)).ToList();
 
@@ -46,7 +44,7 @@ namespace WarSim.Simulation
             var newCommands = new System.Collections.Concurrent.ConcurrentBag<Commands.ICommand>();
 
             // Parallel update units
-            Parallel.ForEach(units, unit =>
+            _ = Parallel.ForEach(units, unit =>
             {
                 try
                 {
@@ -55,7 +53,10 @@ namespace WarSim.Simulation
                     var cmds = _ai.ProcessUnit(unit, snapshot);
                     if (cmds != null)
                     {
-                        foreach (var c in cmds) newCommands.Add(c);
+                        foreach (var c in cmds)
+                        {
+                            newCommands.Add(c);
+                        }
                     }
 
                     // Movement update based on possibly modified unit state
@@ -64,6 +65,7 @@ namespace WarSim.Simulation
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error updating unit {UnitId}", unit.Id);
+                    ConsoleColorLogger.Log("SimulationEngine", LogLevel.Error, $"Error updating unit {unit.Id}: {ex.Message}");
                 }
             });
 
@@ -72,7 +74,7 @@ namespace WarSim.Simulation
 
             // Collect and process commands produced by AI
             // Parallel update projectiles
-            Parallel.ForEach(projectiles, proj =>
+            _ = Parallel.ForEach(projectiles, proj =>
             {
                 try
                 {
@@ -81,13 +83,18 @@ namespace WarSim.Simulation
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error updating projectile {ProjectileId}", proj.Id);
+                    ConsoleColorLogger.Log("SimulationEngine", LogLevel.Error, $"Error updating projectile {proj.Id}: {ex.Message}");
                 }
             });
 
             // Process commands (move/fire) after unit updates
             while (!newCommands.IsEmpty)
             {
-                if (!newCommands.TryTake(out var cmd)) break;
+                if (!newCommands.TryTake(out var cmd))
+                {
+                    break;
+                }
+
                 switch (cmd)
                 {
                     case Commands.MoveCommand mc:
@@ -95,16 +102,34 @@ namespace WarSim.Simulation
                         var target = units.FirstOrDefault(u => u.Id == mc.UnitId);
                         if (target != null)
                         {
-                            if (mc.Heading.HasValue) target.Heading = mc.Heading.Value;
-                            if (mc.Latitude.HasValue) target.Latitude = mc.Latitude.Value;
-                            if (mc.Longitude.HasValue) target.Longitude = mc.Longitude.Value;
+                            if (mc.Heading.HasValue)
+                            {
+                                target.Heading = mc.Heading.Value;
+                            }
+
+                            if (mc.Latitude.HasValue)
+                            {
+                                target.Latitude = mc.Latitude.Value;
+                            }
+
+                            if (mc.Longitude.HasValue)
+                            {
+                                target.Longitude = mc.Longitude.Value;
+                            }
+
                             if (mc.Speed.HasValue)
                             {
                                 switch (target)
                                 {
-                                    case LandUnit lu: lu.GroundSpeed = mc.Speed; break;
-                                    case AirUnit au: au.Airspeed = mc.Speed; break;
-                                    case SeaUnit su: su.SpeedKnots = mc.Speed; break;
+                                    case LandUnit lu:
+                                        lu.GroundSpeed = mc.Speed;
+                                        break;
+                                    case AirUnit au:
+                                        au.Airspeed = mc.Speed;
+                                        break;
+                                    case SeaUnit su:
+                                        su.SpeedKnots = mc.Speed;
+                                        break;
                                 }
                             }
                             target.Status = UnitStatus.Moving;
@@ -122,10 +147,23 @@ namespace WarSim.Simulation
             }
 
             // After processing commands, check projectile collisions and apply effects
+            // compute aggregates for summary
+            var originalUnitPositions = snapshot.Units.ToDictionary(u => u.Id, u => (u.Latitude, u.Longitude));
+            var originalProjectileIds = new HashSet<Guid>(snapshot.Projectiles.Select(p => p.Id));
+            var originalDestroyed = snapshot.Units.Count(u => u.Status == UnitStatus.Destroyed);
+
             projectiles = _weapons.ProcessProjectiles(projectiles, units, snapshot.Factions);
 
             var newState = new WorldState(units, projectiles, snapshot.Factions, snapshot.Tick + 1);
             _world.UpdateState(newState);
+
+            // summary
+            var movedCount = units.Count(u => originalUnitPositions.TryGetValue(u.Id, out var pos) && (Math.Abs(pos.Latitude - u.Latitude) > 1e-6 || Math.Abs(pos.Longitude - u.Longitude) > 1e-6));
+            var firedCount = projectiles.Count(p => !originalProjectileIds.Contains(p.Id));
+            var destroyedNow = units.Count(u => u.Status == UnitStatus.Destroyed);
+            var destroyedDelta = Math.Max(0, destroyedNow - originalDestroyed);
+
+            ConsoleColorLogger.Log("SimulationEngine", LogLevel.Information, $"✅ Tick {snapshot.Tick} → {newState.Tick} complete: {movedCount} moved, {firedCount} fired, {destroyedDelta} destroyed");
 
             return Task.CompletedTask;
         }
@@ -283,7 +321,10 @@ namespace WarSim.Simulation
                     break;
             }
 
-            if (speedMps <= 0) return;
+            if (speedMps <= 0)
+            {
+                return;
+            }
 
             // Simple flat-earth movement approximation
             var distance = speedMps * deltaSeconds; // meters

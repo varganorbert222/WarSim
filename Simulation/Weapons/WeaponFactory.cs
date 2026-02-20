@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
-using WarSim.Domain.Projectiles;
 using WarSim.Domain;
+using WarSim.Domain.Projectiles;
 
 namespace WarSim.Simulation.Weapons
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WarSim.Domain
+﻿namespace WarSim.Domain
 {
     /// <summary>
     /// Base class for all units in the simulation.
@@ -14,24 +12,36 @@ namespace WarSim.Domain
         }
 
         // Keep setter to allow creating snapshot clones with the same identity
-        public Guid Id { get; set; }
+        public Guid Id
+        {
+            get; set;
+        }
 
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Geographic position - latitude in degrees.
         /// </summary>
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Geographic position - longitude in degrees.
         /// </summary>
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Heading in degrees (0-360).
         /// </summary>
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         public UnitStatus Status { get; set; } = UnitStatus.Idle;
 

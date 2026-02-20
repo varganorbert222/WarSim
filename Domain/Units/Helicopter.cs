@@ -1,5 +1,3 @@
-using WarSim.Domain;
-
 namespace WarSim.Domain.Units
 {
     public class Helicopter : AirUnit

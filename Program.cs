@@ -1,7 +1,11 @@
 using System.Security.Cryptography.X509Certificates;
 using WarSim.Extensions;
+using WarSim.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure console logger early using configuration and environment
+ConsoleColorLogger.Configure(builder.Configuration, builder.Environment.EnvironmentName);
 
 // Add services to the container.
 
@@ -91,6 +95,9 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwagger();
     _ = app.UseSwaggerUI();
 }
+
+// Add request logging middleware (console visible)
+app.UseMiddleware<WarSim.Middleware.RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 

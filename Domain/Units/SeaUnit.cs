@@ -1,5 +1,3 @@
-using WarSim.Domain;
-
 namespace WarSim.Domain.Units
 {
     public abstract class SeaUnit : Unit
@@ -9,6 +7,9 @@ namespace WarSim.Domain.Units
         /// <summary>
         /// Nautical speed in knots (optional).
         /// </summary>
-        public double? SpeedKnots { get; set; }
+        public double? SpeedKnots
+        {
+            get; set;
+        }
     }
 }

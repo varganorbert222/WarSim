@@ -1,5 +1,3 @@
-using WarSim.Domain;
-
 namespace WarSim.Domain.Units
 {
     public abstract class AirUnit : Unit
@@ -9,11 +7,17 @@ namespace WarSim.Domain.Units
         /// <summary>
         /// Typical maximum altitude in meters (optional).
         /// </summary>
-        public double? MaxAltitude { get; set; }
+        public double? MaxAltitude
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Typical airspeed in m/s (optional).
         /// </summary>
-        public double? Airspeed { get; set; }
+        public double? Airspeed
+        {
+            get; set;
+        }
     }
 }

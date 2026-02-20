@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
 using WarSim.Domain;
 using WarSim.Domain.Projectiles;
+using WarSim.Logging;
 
 namespace WarSim.Simulation.Weapons
 {
@@ -72,9 +71,21 @@ namespace WarSim.Simulation.Weapons
                 var ownerFaction = owner?.FactionId;
                 foreach (var u in units)
                 {
-                    if (u.Id == p.OwnerUnitId) continue;
-                    if (u.Status == UnitStatus.Destroyed) continue;
-                    if (ownerFaction.HasValue && u.FactionId == ownerFaction.Value) continue; // skip friendlies
+                    if (u.Id == p.OwnerUnitId)
+                    {
+                        continue;
+                    }
+
+                    if (u.Status == UnitStatus.Destroyed)
+                    {
+                        continue;
+                    }
+
+                    if (ownerFaction.HasValue && u.FactionId == ownerFaction.Value)
+                    {
+                        continue; // skip friendlies
+                    }
+
                     var d = DistanceMeters(p.Latitude, p.Longitude, u.Latitude, u.Longitude);
                     if (d < bestDist)
                     {
@@ -99,9 +110,25 @@ namespace WarSim.Simulation.Weapons
                     {
                         // apply damage
                         target.Health -= p.Damage;
+
+                        var projectileType = p switch
+                        {
+                            Bullet => "Bullet",
+                            Shell => "Shell",
+                            Missile => "Missile",
+                            _ => "Projectile"
+                        };
+
+                        var ownerName = units.FirstOrDefault(u => u.Id == p.OwnerUnitId)?.Name ?? "Unknown";
+
                         if (target.Health <= 0)
                         {
                             target.Status = UnitStatus.Destroyed;
+                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Warning, $"⚔️ {ownerName} DESTROYED {target.Name} with {projectileType} (dealt {p.Damage} damage)");
+                        }
+                        else
+                        {
+                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Information, $"💥 {ownerName} HIT {target.Name} with {projectileType} for {p.Damage} damage (HP: {target.Health:F1})");
                         }
 
                         // return projectile to pool
@@ -126,7 +153,7 @@ namespace WarSim.Simulation.Weapons
             var avgLat = (lat1 + lat2) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (lon2 - lon1) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
     }
 }

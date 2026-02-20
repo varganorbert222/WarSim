@@ -36,7 +36,8 @@ namespace WarSim.Controllers
                 _logger.LogWarning("Move request for unknown unit {UnitId}", cmd.UnitId);
                 return NotFound();
             }
-
+            // Log to console too
+            WarSim.Logging.ConsoleColorLogger.Log("API.Controllers.UnitsController", Microsoft.Extensions.Logging.LogLevel.Information, $"MoveUnit request for {cmd.UnitId}");
             return Accepted();
         }
     }

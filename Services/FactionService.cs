@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Logging;
 using WarSim.Domain;
 
 namespace WarSim.Services
@@ -30,7 +27,10 @@ namespace WarSim.Services
             var snap = _world.GetSnapshot();
             var factions = snap.Factions.ToList();
             var idx = factions.FindIndex(f => f.Id == factionId);
-            if (idx < 0) return false;
+            if (idx < 0)
+            {
+                return false;
+            }
 
             // clone faction and set allies
             var f = factions[idx];

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Microsoft.Extensions.Logging;
-using WarSim.Domain;
+﻿using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 using WarSim.Domain.Units;
 
@@ -56,12 +51,33 @@ namespace WarSim.Services
             s1.VisionRangeMeters = 4000.0;
 
             var units = new List<Unit> { a1, v1, s1 };
-            var projectiles = new List<Projectile>();
+
+            var projectiles = new List<Projectile>
+            {
+                new Bullet
+                {
+                    Latitude = 47.4985,
+                    Longitude = 19.041,
+                    Speed = 900,
+                    Heading = 45,
+                    Damage = 10,
+                    OwnerUnitId = a1.Id,
+                },
+                new Shell
+                {
+                    Latitude = 47.499,
+                    Longitude = 19.042,
+                    Speed = 400,
+                    Heading = 180,
+                    Damage = 50,
+                    OwnerUnitId = v1.Id,
+                }
+            };
 
             var factions = new List<Faction>
             {
-                new Faction { Id = 1, Name = "Blue", Color = "#0000FF", Allies = new List<int> { 1 } },
-                new Faction { Id = 2, Name = "Red", Color = "#FF0000", Allies = new List<int> { 2 } }
+                new() { Id = 1, Name = "Blue", Color = "#0000FF", Allies = new List<int> { 1 } },
+                new() { Id = 2, Name = "Red", Color = "#FF0000", Allies = new List<int> { 2 } }
             };
 
             _state = new WorldState(units, projectiles, factions, 0);
@@ -87,7 +103,7 @@ namespace WarSim.Services
         /// </summary>
         public void UpdateState(WorldState newState)
         {
-            Interlocked.Exchange(ref _state, newState);
+            _ = Interlocked.Exchange(ref _state, newState);
         }
 
         /// <summary>
@@ -113,6 +129,7 @@ namespace WarSim.Services
             UpdateState(newState);
 
             _logger.LogInformation("Unit {UnitId} moved to {Lat},{Lon} (snapshot)", id, lat, lon);
+            WarSim.Logging.ConsoleColorLogger.Log("WorldState", Microsoft.Extensions.Logging.LogLevel.Information, $"Unit {id} moved to {lat:F6},{lon:F6}");
             return true;
         }
 

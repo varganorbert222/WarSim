@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 

@@ -1,5 +1,5 @@
-using System;
 using WarSim.Domain;
+using WarSim.Logging;
 
 namespace WarSim.Simulation.AI
 {
@@ -21,8 +21,12 @@ namespace WarSim.Simulation.AI
             else if (unit.Status == UnitStatus.Moving)
             {
                 // small random turn
-                var newHeading = (unit.Heading + (_rand.NextDouble() - 0.5) * 5.0) % 360.0;
-                if (newHeading < 0) newHeading += 360.0;
+                var newHeading = (unit.Heading + ((_rand.NextDouble() - 0.5) * 5.0)) % 360.0;
+                if (newHeading < 0)
+                {
+                    newHeading += 360.0;
+                }
+
                 list.Add(new Commands.MoveCommand(unit.Id, null, null, newHeading, null));
             }
 
@@ -49,7 +53,11 @@ namespace WarSim.Simulation.AI
                 // Fire if within a convenient range
                 if (bestDist <= 2000.0) // arbitrary firing range
                 {
-                    list.Add(new Commands.FireCommand(unit.Id, ProjectileType.Bullet, headingTo, 400.0, 10.0, chosen.Latitude, chosen.Longitude));
+                    var projectileType = ProjectileType.Bullet;
+                    var projectileTypeStr = "Bullet";
+
+                    list.Add(new Commands.FireCommand(unit.Id, projectileType, headingTo, 400.0, 10.0, chosen.Latitude, chosen.Longitude));
+                    ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Information, $"🎯 {unit.Name} FIRED {projectileTypeStr} at {chosen.Name} (distance: {bestDist:F0}m)");
                 }
             }
 
@@ -63,7 +71,7 @@ namespace WarSim.Simulation.AI
             var avgLat = (lat1 + lat2) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (lon2 - lon1) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
 
         private static double HeadingTo(double lat1, double lon1, double lat2, double lon2)
@@ -71,7 +79,11 @@ namespace WarSim.Simulation.AI
             var dy = lat2 - lat1;
             var dx = lon2 - lon1;
             var angle = Math.Atan2(dx, dy) * 180.0 / Math.PI; // note: swapped to match previous conventions
-            if (angle < 0) angle += 360.0;
+            if (angle < 0)
+            {
+                angle += 360.0;
+            }
+
             return angle;
         }
     }

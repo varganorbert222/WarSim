@@ -1,5 +1,3 @@
-using WarSim.Domain;
-
 namespace WarSim.Domain.Units
 {
     public abstract class LandUnit : Unit
@@ -9,6 +7,9 @@ namespace WarSim.Domain.Units
         /// <summary>
         /// Ground speed in m/s (optional).
         /// </summary>
-        public double? GroundSpeed { get; set; }
+        public double? GroundSpeed
+        {
+            get; set;
+        }
     }
 }

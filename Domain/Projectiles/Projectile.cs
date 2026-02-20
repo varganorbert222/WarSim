@@ -1,5 +1,3 @@
-using System;
-
 namespace WarSim.Domain.Projectiles
 {
     public abstract class Projectile
@@ -10,38 +8,62 @@ namespace WarSim.Domain.Projectiles
         }
 
         // Allow setting Id when creating snapshot clones
-        public Guid Id { get; set; }
+        public Guid Id
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Latitude of the projectile.
         /// </summary>
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Longitude of the projectile.
         /// </summary>
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Speed in m/s.
         /// </summary>
-        public double Speed { get; set; }
+        public double Speed
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Heading in degrees.
         /// </summary>
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Damage potential.
         /// </summary>
-        public double Damage { get; set; }
+        public double Damage
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Owner unit id (who fired it).
         /// </summary>
-        public Guid OwnerUnitId { get; set; }
+        public Guid OwnerUnitId
+        {
+            get; set;
+        }
 
-        public abstract string Type { get; }
+        public abstract string Type
+        {
+            get;
+        }
     }
 }
