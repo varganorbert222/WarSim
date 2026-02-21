@@ -1,0 +1,385 @@
+{
+  "name": "Georgia Conflict - Caucasus Theater",
+  "description": "Realistic DCS World Caucasus scenario with Blue (Georgia) vs Red (Russia) forces",
+  "mapId": "caucasus",
+  "factions": [
+    {
+      "id": 1,
+      "name": "Georgia (Blue)",
+      "color": "#0066CC",
+      "allies": [1]
+    },
+    {
+      "id": 2,
+      "name": "Russia (Red)",
+      "color": "#CC0000",
+      "allies": [2]
+    }
+  ],
+  "units": [
+    {
+      "name": "Viper 1-1",
+      "category": "AIRPLANE",
+      "subcategory": "Multirole",
+      "latitude": 41.6102,
+      "longitude": 41.5997,
+      "heading": 90,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 100,
+      "visionRangeMeters": 8000,
+      "properties": {
+        "capacity": 1
+      }
+    },
+    {
+      "name": "Viper 1-2",
+      "category": "AIRPLANE",
+      "subcategory": "Multirole",
+      "latitude": 41.6122,
+      "longitude": 41.5987,
+      "heading": 90,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 100,
+      "visionRangeMeters": 8000,
+      "properties": {
+        "capacity": 1
+      }
+    },
+    {
+      "name": "Grach 2-1",
+      "category": "AIRPLANE",
+      "subcategory": "Attack",
+      "latitude": 41.9281,
+      "longitude": 41.8575,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 100,
+      "visionRangeMeters": 5000,
+      "properties": {
+        "capacity": 1
+      }
+    },
+    {
+      "name": "Eye-1",
+      "category": "AIRPLANE",
+      "subcategory": "UAV",
+      "latitude": 42.1768,
+      "longitude": 42.4827,
+      "heading": 45,
+      "speed": 80,
+      "status": "Moving",
+      "factionId": 1,
+      "health": 50,
+      "visionRangeMeters": 12000,
+      "properties": {
+        "capacity": 0
+      }
+    },
+    {
+      "name": "Dustoff 3-1",
+      "category": "HELICOPTER",
+      "subcategory": "TransportHelicopter",
+      "latitude": 42.2395,
+      "longitude": 42.0456,
+      "heading": 270,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 80,
+      "visionRangeMeters": 3000,
+      "properties": {}
+    },
+    {
+      "name": "1st Rifle Platoon",
+      "category": "GROUND_UNIT",
+      "subcategory": "Infantry",
+      "latitude": 41.6168,
+      "longitude": 41.6367,
+      "heading": 0,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 100,
+      "visionRangeMeters": 800,
+      "properties": {
+        "strength": 30
+      }
+    },
+    {
+      "name": "Tank Platoon Alpha",
+      "category": "GROUND_UNIT",
+      "subcategory": "MainBattleTank",
+      "latitude": 41.9842,
+      "longitude": 44.1089,
+      "heading": 45,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 150,
+      "visionRangeMeters": 3000,
+      "properties": {
+        "crew": 4
+      }
+    },
+    {
+      "name": "Patriot Battery 1",
+      "category": "GROUND_UNIT",
+      "subcategory": "SAMLongRange",
+      "latitude": 41.7151,
+      "longitude": 44.8271,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 120,
+      "visionRangeMeters": 15000,
+      "properties": {
+        "crew": 6
+      }
+    },
+    {
+      "name": "Shilka Defense 2",
+      "category": "GROUND_UNIT",
+      "subcategory": "AAA",
+      "latitude": 42.1477,
+      "longitude": 41.6718,
+      "heading": 90,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 100,
+      "visionRangeMeters": 5000,
+      "properties": {
+        "crew": 4
+      }
+    },
+    {
+      "name": "GNS Dioskuria",
+      "category": "SHIP",
+      "subcategory": "Frigate",
+      "latitude": 41.6425,
+      "longitude": 41.6340,
+      "heading": 270,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 200,
+      "visionRangeMeters": 10000,
+      "properties": {
+        "crew": 150
+      }
+    },
+    {
+      "name": "PB-201",
+      "category": "SHIP",
+      "subcategory": "PatrolBoat",
+      "latitude": 42.1547,
+      "longitude": 41.6620,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 1,
+      "health": 80,
+      "visionRangeMeters": 6000,
+      "properties": {
+        "crew": 25
+      }
+    },
+    {
+      "name": "Flanker 1-1",
+      "category": "AIRPLANE",
+      "subcategory": "Interceptor",
+      "latitude": 45.0021,
+      "longitude": 37.3473,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 10000,
+      "properties": {
+        "capacity": 1
+      }
+    },
+    {
+      "name": "Flanker 1-2",
+      "category": "AIRPLANE",
+      "subcategory": "Interceptor",
+      "latitude": 45.0051,
+      "longitude": 37.3473,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 10000,
+      "properties": {
+        "capacity": 1
+      }
+    },
+    {
+      "name": "Frogfoot 2-1",
+      "category": "AIRPLANE",
+      "subcategory": "Attack",
+      "latitude": 43.7889,
+      "longitude": 44.6061,
+      "heading": 270,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 5000,
+      "properties": {
+        "capacity": 1
+      }
+    },
+    {
+      "name": "Mainstay 3-1",
+      "category": "AIRPLANE",
+      "subcategory": "AWACS",
+      "latitude": 44.2251,
+      "longitude": 43.5819,
+      "heading": 90,
+      "speed": 450,
+      "status": "Moving",
+      "factionId": 2,
+      "health": 120,
+      "visionRangeMeters": 50000,
+      "properties": {
+        "capacity": 10
+      }
+    },
+    {
+      "name": "Havoc 4-1",
+      "category": "HELICOPTER",
+      "subcategory": "AttackHelicopter",
+      "latitude": 43.0970,
+      "longitude": 40.5706,
+      "heading": 90,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 90,
+      "visionRangeMeters": 4000,
+      "properties": {}
+    },
+    {
+      "name": "VDV Airborne Company",
+      "category": "GROUND_UNIT",
+      "subcategory": "Infantry",
+      "latitude": 43.0015,
+      "longitude": 41.0192,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 1000,
+      "properties": {
+        "strength": 80
+      }
+    },
+    {
+      "name": "T-90 Platoon Bravo",
+      "category": "GROUND_UNIT",
+      "subcategory": "MainBattleTank",
+      "latitude": 43.0368,
+      "longitude": 44.6680,
+      "heading": 270,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 180,
+      "visionRangeMeters": 3500,
+      "properties": {
+        "crew": 3
+      }
+    },
+    {
+      "name": "S-300 Battery 5",
+      "category": "GROUND_UNIT",
+      "subcategory": "SAMLongRange",
+      "latitude": 43.8089,
+      "longitude": 44.6061,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 150,
+      "visionRangeMeters": 18000,
+      "properties": {
+        "crew": 8
+      }
+    },
+    {
+      "name": "Smerch Battery 1",
+      "category": "GROUND_UNIT",
+      "subcategory": "MLRS",
+      "latitude": 44.5392,
+      "longitude": 38.0125,
+      "heading": 225,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 2000,
+      "properties": {
+        "crew": 6
+      }
+    },
+    {
+      "name": "RFS Smetlivy",
+      "category": "SHIP",
+      "subcategory": "Destroyer",
+      "latitude": 44.7193,
+      "longitude": 37.7827,
+      "heading": 90,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 250,
+      "visionRangeMeters": 12000,
+      "properties": {
+        "crew": 280
+      }
+    },
+    {
+      "name": "RFS Merkury",
+      "category": "SHIP",
+      "subcategory": "Corvette",
+      "latitude": 44.1042,
+      "longitude": 39.0619,
+      "heading": 180,
+      "speed": 0,
+      "status": "Idle",
+      "factionId": 2,
+      "health": 150,
+      "visionRangeMeters": 8000,
+      "properties": {
+        "crew": 60
+      }
+    },
+    {
+      "name": "RFS Kilo-636",
+      "category": "SHIP",
+      "subcategory": "Submarine",
+      "latitude": 43.5397,
+      "longitude": 39.7202,
+      "heading": 270,
+      "speed": 5,
+      "status": "Moving",
+      "factionId": 2,
+      "health": 120,
+      "visionRangeMeters": 15000,
+      "properties": {
+        "crew": 52
+      }
+    }
+  ]
+}

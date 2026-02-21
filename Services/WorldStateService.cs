@@ -1,5 +1,4 @@
 ﻿using WarSim.Domain;
-using WarSim.Domain.Projectiles;
 
 namespace WarSim.Services
 {
@@ -12,107 +11,26 @@ namespace WarSim.Services
         private readonly ILogger<WorldStateService> _logger;
         private readonly Simulation.IEntityProcessor _entityProcessor;
 
-        public WorldStateService(ILogger<WorldStateService> _logger, Simulation.IEntityProcessor entityProcessor)
+        public WorldStateService(
+            ILogger<WorldStateService> logger,
+            Simulation.IEntityProcessor entityProcessor,
+            ScenarioService scenarioService)
         {
-            this._logger = _logger;
+            _logger = logger;
             _entityProcessor = entityProcessor;
 
-            // Demo units using the new category hierarchy
-            var a1 = new WarSim.Domain.Units.Aircraft(WarSim.Domain.AirplaneSubcategory.Fighter)
+            try
             {
-                Name = "Alpha-1 (Fighter)",
-                Latitude = 47.4979,
-                Longitude = 19.0402,
-                Airspeed = 250.0,
-                Capacity = 1,
-                FactionId = 1,
-                VisionRangeMeters = 5000.0
-            };
-
-            var h1 = new WarSim.Domain.Units.Helicopter(WarSim.Domain.HelicopterSubcategory.AttackHelicopter)
+                _state = scenarioService.CreateCaucasusScenario();
+                _logger.LogInformation(
+                    "Initialized world state from caucasus-default scenario with {UnitCount} units",
+                    _state.Units.Count);
+            }
+            catch (Exception ex)
             {
-                Name = "Delta-1 (Attack Heli)",
-                Latitude = 47.49,
-                Longitude = 19.04,
-                Airspeed = 150.0,
-                FactionId = 1,
-                VisionRangeMeters = 3000.0
-            };
-
-            var v1 = new WarSim.Domain.Units.Vehicle(WarSim.Domain.GroundUnitSubcategory.MainBattleTank)
-            {
-                Name = "Bravo-2 (MBT)",
-                Latitude = 47.50,
-                Longitude = 19.05,
-                GroundSpeed = 15.0,
-                Crew = 4,
-                FactionId = 2,
-                VisionRangeMeters = 2000.0
-            };
-
-            var i1 = new WarSim.Domain.Units.Infantry()
-            {
-                Name = "Echo-1 (Infantry)",
-                Latitude = 47.505,
-                Longitude = 19.055,
-                GroundSpeed = 2.0,
-                Strength = 10,
-                FactionId = 2,
-                VisionRangeMeters = 500.0
-            };
-
-            var s1 = new WarSim.Domain.Units.Ship(WarSim.Domain.ShipSubcategory.Frigate)
-            {
-                Name = "Charlie-1 (Frigate)",
-                Latitude = 47.48,
-                Longitude = 19.03,
-                SpeedKnots = 20.0,
-                Crew = 120,
-                FactionId = 1,
-                VisionRangeMeters = 4000.0
-            };
-
-            var st1 = new WarSim.Domain.Units.Structure(WarSim.Domain.StructureSubcategory.RadarTower)
-            {
-                Name = "Foxtrot-1 (Radar)",
-                Latitude = 47.51,
-                Longitude = 19.06,
-                FactionId = 1,
-                VisionRangeMeters = 10000.0,
-                Health = 200.0
-            };
-
-            var units = new List<Unit> { a1, h1, v1, i1, s1, st1 };
-
-            var projectiles = new List<Projectile>
-            {
-                new Bullet
-                {
-                    Latitude = 47.4985,
-                    Longitude = 19.041,
-                    Speed = 900,
-                    Heading = 45,
-                    Damage = 10,
-                    OwnerUnitId = a1.Id,
-                },
-                new Shell
-                {
-                    Latitude = 47.499,
-                    Longitude = 19.042,
-                    Speed = 400,
-                    Heading = 180,
-                    Damage = 50,
-                    OwnerUnitId = v1.Id,
-                }
-            };
-
-            var factions = new List<Faction>
-            {
-                new() { Id = 1, Name = "Blue", Color = "#0000FF", Allies = new List<int> { 1 } },
-                new() { Id = 2, Name = "Red", Color = "#FF0000", Allies = new List<int> { 2 } }
-            };
-
-            _state = new WorldState(units, projectiles, factions, 0);
+                _logger.LogError(ex, "Failed to load caucasus-default scenario, falling back to empty world state");
+                _state = new WorldState(new List<Unit>(), new List<WarSim.Domain.Projectiles.Projectile>(), new List<Faction>(), 0);
+            }
         }
 
         public WorldState GetSnapshot()

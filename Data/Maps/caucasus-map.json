@@ -1,0 +1,339 @@
+{
+  "name": "Caucasus Theater",
+  "description": "DCS World Caucasus map - Georgia and southern Russia region",
+  "mapBounds": {
+    "minLatitude": 41.0,
+    "maxLatitude": 45.5,
+    "minLongitude": 37.0,
+    "maxLongitude": 45.0
+  },
+  "centerPoint": {
+    "name": "Theater Center",
+    "latitude": 42.5,
+    "longitude": 42.0
+  },
+  "airbases": [
+    {
+      "id": "batumi",
+      "name": "Batumi International",
+      "latitude": 41.6102,
+      "longitude": 41.5997,
+      "defaultFaction": "Blue",
+      "runwayHeading": 130,
+      "elevation": 32
+    },
+    {
+      "id": "kobuleti",
+      "name": "Kobuleti",
+      "latitude": 41.9281,
+      "longitude": 41.8575,
+      "defaultFaction": "Blue",
+      "runwayHeading": 70,
+      "elevation": 18
+    },
+    {
+      "id": "kutaisi",
+      "name": "Kutaisi Kopitnari",
+      "latitude": 42.1768,
+      "longitude": 42.4827,
+      "defaultFaction": "Blue",
+      "runwayHeading": 80,
+      "elevation": 42
+    },
+    {
+      "id": "senaki",
+      "name": "Senaki-Kolkhi",
+      "latitude": 42.2395,
+      "longitude": 42.0456,
+      "defaultFaction": "Blue",
+      "runwayHeading": 90,
+      "elevation": 12
+    },
+    {
+      "id": "tbilisi",
+      "name": "Tbilisi Lochini",
+      "latitude": 41.6692,
+      "longitude": 44.9547,
+      "defaultFaction": "Blue",
+      "runwayHeading": 130,
+      "elevation": 491
+    },
+    {
+      "id": "gudauta",
+      "name": "Gudauta",
+      "latitude": 43.0970,
+      "longitude": 40.5706,
+      "defaultFaction": "Red",
+      "runwayHeading": 150,
+      "elevation": 22
+    },
+    {
+      "id": "sochi",
+      "name": "Sochi-Adler",
+      "latitude": 43.4499,
+      "longitude": 39.9566,
+      "defaultFaction": "Red",
+      "runwayHeading": 60,
+      "elevation": 30
+    },
+    {
+      "id": "anapa",
+      "name": "Anapa Vityazevo",
+      "latitude": 45.0021,
+      "longitude": 37.3473,
+      "defaultFaction": "Red",
+      "runwayHeading": 40,
+      "elevation": 42
+    },
+    {
+      "id": "gelendzhik",
+      "name": "Gelendzhik",
+      "latitude": 44.5692,
+      "longitude": 38.0125,
+      "defaultFaction": "Red",
+      "runwayHeading": 40,
+      "elevation": 27
+    },
+    {
+      "id": "krasnodar",
+      "name": "Krasnodar Pashkovsky",
+      "latitude": 45.0347,
+      "longitude": 39.1705,
+      "defaultFaction": "Red",
+      "runwayHeading": 90,
+      "elevation": 36
+    },
+    {
+      "id": "mineralnye",
+      "name": "Mineralnye Vody",
+      "latitude": 44.2251,
+      "longitude": 43.0819,
+      "defaultFaction": "Red",
+      "runwayHeading": 120,
+      "elevation": 315
+    },
+    {
+      "id": "mozdok",
+      "name": "Mozdok",
+      "latitude": 43.7889,
+      "longitude": 44.6061,
+      "defaultFaction": "Red",
+      "runwayHeading": 80,
+      "elevation": 126
+    },
+    {
+      "id": "beslan",
+      "name": "Beslan",
+      "latitude": 43.2051,
+      "longitude": 44.6064,
+      "defaultFaction": "Red",
+      "runwayHeading": 100,
+      "elevation": 520
+    }
+  ],
+  "cities": [
+    {
+      "id": "batumi_city",
+      "name": "Batumi City",
+      "latitude": 41.6168,
+      "longitude": 41.6367,
+      "defaultFaction": "Blue",
+      "population": 152839
+    },
+    {
+      "id": "poti",
+      "name": "Poti",
+      "latitude": 42.1477,
+      "longitude": 41.6718,
+      "defaultFaction": "Blue",
+      "population": 47149
+    },
+    {
+      "id": "zugdidi",
+      "name": "Zugdidi",
+      "latitude": 42.5088,
+      "longitude": 41.8708,
+      "defaultFaction": "Blue",
+      "population": 73014
+    },
+    {
+      "id": "tbilisi",
+      "name": "Tbilisi City",
+      "latitude": 41.7151,
+      "longitude": 44.8271,
+      "defaultFaction": "Blue",
+      "population": 1118035
+    },
+    {
+      "id": "gori",
+      "name": "Gori",
+      "latitude": 41.9842,
+      "longitude": 44.1089,
+      "defaultFaction": "Blue",
+      "population": 48143
+    },
+    {
+      "id": "sukhumi",
+      "name": "Sukhumi",
+      "latitude": 43.0015,
+      "longitude": 41.0192,
+      "defaultFaction": "Contested",
+      "population": 64506
+    },
+    {
+      "id": "sochi_city",
+      "name": "Sochi",
+      "latitude": 43.5855,
+      "longitude": 39.7231,
+      "defaultFaction": "Red",
+      "population": 343334
+    },
+    {
+      "id": "tuapse",
+      "name": "Tuapse",
+      "latitude": 44.0969,
+      "longitude": 39.0768,
+      "defaultFaction": "Red",
+      "population": 63292
+    },
+    {
+      "id": "novorossiysk",
+      "name": "Novorossiysk",
+      "latitude": 44.7233,
+      "longitude": 37.7686,
+      "defaultFaction": "Red",
+      "population": 241952
+    },
+    {
+      "id": "vladikavkaz",
+      "name": "Vladikavkaz",
+      "latitude": 43.0368,
+      "longitude": 44.6680,
+      "defaultFaction": "Red",
+      "population": 311693
+    }
+  ],
+  "navalZones": [
+    {
+      "id": "batumi_port",
+      "name": "Batumi Port",
+      "latitude": 41.6425,
+      "longitude": 41.6340,
+      "defaultFaction": "Blue",
+      "type": "Port"
+    },
+    {
+      "id": "poti_port",
+      "name": "Poti Port",
+      "latitude": 42.1547,
+      "longitude": 41.6620,
+      "defaultFaction": "Blue",
+      "type": "Port"
+    },
+    {
+      "id": "sukhumi_port",
+      "name": "Sukhumi Port",
+      "latitude": 43.0036,
+      "longitude": 41.0145,
+      "defaultFaction": "Contested",
+      "type": "Port"
+    },
+    {
+      "id": "sochi_port",
+      "name": "Sochi Port",
+      "latitude": 43.5897,
+      "longitude": 39.7202,
+      "defaultFaction": "Red",
+      "type": "Port"
+    },
+    {
+      "id": "tuapse_port",
+      "name": "Tuapse Port",
+      "latitude": 44.1042,
+      "longitude": 39.0619,
+      "defaultFaction": "Red",
+      "type": "Port"
+    },
+    {
+      "id": "novorossiysk_port",
+      "name": "Novorossiysk Port",
+      "latitude": 44.7193,
+      "longitude": 37.7827,
+      "defaultFaction": "Red",
+      "type": "NavalBase"
+    },
+    {
+      "id": "anapa_waters",
+      "name": "Anapa Waters",
+      "latitude": 44.8950,
+      "longitude": 37.3200,
+      "defaultFaction": "Red",
+      "type": "PatrolZone"
+    }
+  ],
+  "staticStructures": [
+    {
+      "id": "batumi_radar",
+      "name": "Batumi ATC Radar",
+      "type": "RadarTower",
+      "latitude": 41.6202,
+      "longitude": 41.6097,
+      "heading": 0,
+      "faction": "Blue"
+    },
+    {
+      "id": "kutaisi_hangar_1",
+      "name": "Kutaisi Hangar 1",
+      "type": "Hangar",
+      "latitude": 42.1718,
+      "longitude": 42.4877,
+      "heading": 0,
+      "faction": "Blue"
+    },
+    {
+      "id": "tbilisi_command",
+      "name": "Tbilisi Command Center",
+      "type": "CommandBunker",
+      "latitude": 41.7151,
+      "longitude": 44.8471,
+      "heading": 0,
+      "faction": "Blue"
+    },
+    {
+      "id": "anapa_radar",
+      "name": "Anapa Early Warning Radar",
+      "type": "RadarTower",
+      "latitude": 45.0171,
+      "longitude": 37.3573,
+      "heading": 0,
+      "faction": "Red"
+    },
+    {
+      "id": "mozdok_has_3",
+      "name": "Mozdok HAS-3",
+      "type": "HardenedAircraftShelter",
+      "latitude": 43.7789,
+      "longitude": 44.6141,
+      "heading": 0,
+      "faction": "Red"
+    },
+    {
+      "id": "sochi_comms",
+      "name": "Sochi Comms Relay",
+      "type": "CommunicationTower",
+      "latitude": 43.6055,
+      "longitude": 39.7231,
+      "heading": 0,
+      "faction": "Red"
+    },
+    {
+      "id": "beslan_sam",
+      "name": "Beslan SA-6 Site",
+      "type": "StaticSAM",
+      "latitude": 43.2251,
+      "longitude": 44.5964,
+      "heading": 0,
+      "faction": "Red"
+    }
+  ]
+}
