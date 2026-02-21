@@ -39,6 +39,8 @@ namespace WarSim.Controllers
         private static UnitMovementDto MapUnitToMovement(Domain.Unit u)
         {
             double speedMps = 0.0;
+            double? altitude = null;
+
             switch (u)
             {
                 case LandUnit lu when lu.GroundSpeed.HasValue:
@@ -46,11 +48,17 @@ namespace WarSim.Controllers
                     break;
                 case AirUnit au when au.Airspeed.HasValue:
                     speedMps = au.Airspeed.Value;
+                    altitude = au.MaxAltitude ?? 0;
                     break;
                 case SeaUnit su when su.SpeedKnots.HasValue:
                     speedMps = su.SpeedKnots.Value * 0.514444; // knots to m/s
                     break;
             }
+
+            // Calculate direction vector
+            var radians = u.Heading * Math.PI / 180.0;
+            var directionX = Math.Sin(radians);
+            var directionY = Math.Cos(radians);
 
             return new UnitMovementDto
             {
@@ -60,10 +68,16 @@ namespace WarSim.Controllers
                 Subcategory = u.Subcategory,
                 Latitude = u.Latitude,
                 Longitude = u.Longitude,
+                Altitude = altitude,
                 Heading = u.Heading,
                 SpeedMps = speedMps,
                 Status = u.Status.ToString(),
-                FactionId = u.FactionId
+                FactionId = u.FactionId,
+                Health = u.Health,
+                VisionRange = u.VisionRangeMeters,
+                DirectionX = directionX,
+                DirectionY = directionY,
+                AmmoPercentage = u.GetAmmoPercent()
             };
         }
 
