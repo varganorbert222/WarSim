@@ -10,6 +10,8 @@ namespace WarSim.Controllers
     {
         private readonly WorldStateService _worldState;
         private readonly UnitInfoService _unitInfo;
+        private readonly Dictionary<string, (long tick, object data)> _cache = new();
+        private readonly object _cacheLock = new();
 
         public UnitDetailsController(WorldStateService worldState, UnitInfoService unitInfo)
         {
@@ -24,18 +26,27 @@ namespace WarSim.Controllers
         public ActionResult<DetailedUnitDto> GetUnitDetails(Guid unitId, [FromQuery] int? requestorFactionId = null)
         {
             var snapshot = _worldState.GetSnapshot();
-            var unit = snapshot.Units.FirstOrDefault(u => u.Id == unitId);
+            var cacheKey = $"unit_{unitId}_{requestorFactionId}";
 
-            if (unit == null)
+            lock (_cacheLock)
             {
-                return NotFound(new
+                if (_cache.TryGetValue(cacheKey, out var cached) && cached.tick == snapshot.Tick)
                 {
-                    error = $"Unit with ID {unitId} not found"
-                });
-            }
+                    return Ok(cached.data);
+                }
 
-            var detailedInfo = _unitInfo.CreateDetailedUnitDto(unit, snapshot, requestorFactionId);
-            return Ok(detailedInfo);
+                var unit = snapshot.Units.FirstOrDefault(u => u.Id == unitId);
+
+                if (unit == null)
+                {
+                    return NotFound(new { error = $"Unit with ID {unitId} not found" });
+                }
+
+                var detailedInfo = _unitInfo.CreateDetailedUnitDto(unit, snapshot, requestorFactionId);
+                _cache[cacheKey] = (snapshot.Tick, detailedInfo);
+
+                return Ok(detailedInfo);
+            }
         }
 
         /// <summary>
@@ -45,18 +56,30 @@ namespace WarSim.Controllers
         public ActionResult<List<DetailedUnitDto>> GetAllUnitsDetails([FromQuery] int? factionId = null, [FromQuery] int? requestorFactionId = null)
         {
             var snapshot = _worldState.GetSnapshot();
-            var units = snapshot.Units.AsEnumerable();
+            var cacheKey = $"all_{factionId}_{requestorFactionId}";
 
-            if (factionId.HasValue)
+            lock (_cacheLock)
             {
-                units = units.Where(u => u.FactionId == factionId.Value);
+                if (_cache.TryGetValue(cacheKey, out var cached) && cached.tick == snapshot.Tick)
+                {
+                    return Ok(cached.data);
+                }
+
+                var units = snapshot.Units.AsEnumerable();
+
+                if (factionId.HasValue)
+                {
+                    units = units.Where(u => u.FactionId == factionId.Value);
+                }
+
+                var detailedInfoList = units
+                    .Select(u => _unitInfo.CreateDetailedUnitDto(u, snapshot, requestorFactionId))
+                    .ToList();
+
+                _cache[cacheKey] = (snapshot.Tick, detailedInfoList);
+
+                return Ok(detailedInfoList);
             }
-
-            var detailedInfoList = units
-                .Select(u => _unitInfo.CreateDetailedUnitDto(u, snapshot, requestorFactionId))
-                .ToList();
-
-            return Ok(detailedInfoList);
         }
 
         /// <summary>

@@ -11,6 +11,9 @@ namespace WarSim.Controllers
     public class MovementController : ControllerBase
     {
         private readonly WorldStateService _world;
+        private MovementSnapshotDto? _cachedSnapshot;
+        private long _cachedTick = -1;
+        private readonly object _cacheLock = new();
 
         public MovementController(WorldStateService world)
         {
@@ -20,20 +23,38 @@ namespace WarSim.Controllers
         /// <summary>
         /// Get optimized movement snapshot for client-side interpolation and prediction.
         /// Returns normalized speed values (m/s) and essential position/heading data.
+        /// Uses caching to avoid rebuilding the same snapshot for the same tick.
         /// </summary>
         [HttpGet("snapshot")]
         public ActionResult<MovementSnapshotDto> GetSnapshot()
         {
             var snap = _world.GetSnapshot();
-            var dto = new MovementSnapshotDto
-            {
-                Tick = snap.Tick,
-                Timestamp = DateTime.UtcNow,
-                Units = snap.Units.Select(MapUnitToMovement).ToList(),
-                Projectiles = snap.Projectiles.Select(MapProjectileToMovement).ToList()
-            };
 
-            return Ok(dto);
+            // Check if we can return cached snapshot
+            lock (_cacheLock)
+            {
+                if (_cachedSnapshot != null && _cachedTick == snap.Tick)
+                {
+                    // Update timestamp for each request but return cached data
+                    _cachedSnapshot.Timestamp = DateTime.UtcNow;
+                    return Ok(_cachedSnapshot);
+                }
+
+                // Build new snapshot
+                var dto = new MovementSnapshotDto
+                {
+                    Tick = snap.Tick,
+                    Timestamp = DateTime.UtcNow,
+                    Units = snap.Units.Select(MapUnitToMovement).ToList(),
+                    Projectiles = snap.Projectiles.Select(MapProjectileToMovement).ToList()
+                };
+
+                // Cache it
+                _cachedSnapshot = dto;
+                _cachedTick = snap.Tick;
+
+                return Ok(dto);
+            }
         }
 
         private static UnitMovementDto MapUnitToMovement(Domain.Unit u)
