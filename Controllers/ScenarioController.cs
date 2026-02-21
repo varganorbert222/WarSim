@@ -11,6 +11,10 @@ namespace WarSim.Controllers
         private readonly ScenarioService _scenarioService;
         private readonly WorldStateService _worldState;
         private readonly MapService _mapService;
+        private MapDefinitionDto? _cachedMap;
+        private MissionDefinitionDto? _cachedExport;
+        private long _cachedExportTick = -1;
+        private readonly object _cacheLock = new();
 
         public ScenarioController(ScenarioService scenarioService, WorldStateService worldState, MapService mapService)
         {
@@ -20,17 +24,28 @@ namespace WarSim.Controllers
         }
 
         /// <summary>
-        /// Get current map definition (airbases, cities, naval zones, strategic points)
+        /// Get current map definition (airbases, cities, naval zones, strategic points).
+        /// Map is static and cached permanently.
         /// </summary>
         [HttpGet("map")]
         public ActionResult<MapDefinitionDto> GetMapDefinition()
         {
-            var map = _mapService.GetCurrentMap();
-            if (map == null)
+            lock (_cacheLock)
             {
-                return NotFound(new { error = "No map loaded" });
+                if (_cachedMap != null)
+                {
+                    return Ok(_cachedMap);
+                }
+
+                var map = _mapService.GetCurrentMap();
+                if (map == null)
+                {
+                    return NotFound(new { error = "No map loaded" });
+                }
+
+                _cachedMap = map;
+                return Ok(_cachedMap);
             }
-            return Ok(map);
         }
 
         /// <summary>
@@ -47,6 +62,14 @@ namespace WarSim.Controllers
                 var json = System.Text.Json.JsonSerializer.Serialize(missionDto);
                 var newWorldState = _scenarioService.LoadMissionFromJson(json);
                 _worldState.UpdateState(newWorldState);
+
+                // Invalidate caches
+                lock (_cacheLock)
+                {
+                    _cachedMap = null;
+                    _cachedExport = null;
+                    _cachedExportTick = -1;
+                }
 
                 WarSim.Logging.ConsoleColorLogger.Log("API", Microsoft.Extensions.Logging.LogLevel.Warning,
                     $"🔄 Mission loaded: '{missionDto.MissionName}' with {missionDto.Units.Count} units + {missionDto.StaticStructures.Count} structures");
@@ -66,38 +89,51 @@ namespace WarSim.Controllers
         }
 
         /// <summary>
-        /// Export current world state as a mission JSON definition
+        /// Export current world state as a mission JSON definition.
+        /// Cached based on world state tick.
         /// </summary>
         [HttpGet("export")]
         public ActionResult<MissionDefinitionDto> ExportMission()
         {
             var worldState = _worldState.GetSnapshot();
-            var map = _mapService.GetCurrentMap();
 
-            var mission = new MissionDefinitionDto
+            lock (_cacheLock)
             {
-                MissionName = "Exported Mission",
-                Description = "Mission exported from running simulation",
-                MapId = map?.Name.ToLowerInvariant().Replace(" ", "_") ?? "unknown",
-                Version = "1.0",
-                Factions = worldState.Factions.Select(f => new FactionDefinitionDto
+                if (_cachedExport != null && _cachedExportTick == worldState.Tick)
                 {
-                    Id = f.Id,
-                    Name = f.Name,
-                    Color = f.Color,
-                    Allies = f.Allies.ToList()
-                }).ToList(),
-                Units = worldState.Units
-                    .Where(u => u is not Domain.Units.Structure)
-                    .Select(u => MapUnitToDefinition(u))
-                    .ToList(),
-                StaticStructures = worldState.Units
-                    .OfType<Domain.Units.Structure>()
-                    .Select(s => MapStructureToDefinition(s))
-                    .ToList()
-            };
+                    return Ok(_cachedExport);
+                }
 
-            return Ok(mission);
+                var map = _mapService.GetCurrentMap();
+
+                var mission = new MissionDefinitionDto
+                {
+                    MissionName = "Exported Mission",
+                    Description = "Mission exported from running simulation",
+                    MapId = map?.Name.ToLowerInvariant().Replace(" ", "_") ?? "unknown",
+                    Version = "1.0",
+                    Factions = worldState.Factions.Select(f => new FactionDefinitionDto
+                    {
+                        Id = f.Id,
+                        Name = f.Name,
+                        Color = f.Color,
+                        Allies = f.Allies.ToList()
+                    }).ToList(),
+                    Units = worldState.Units
+                        .Where(u => u is not Domain.Units.Structure)
+                        .Select(u => MapUnitToDefinition(u))
+                        .ToList(),
+                    StaticStructures = worldState.Units
+                        .OfType<Domain.Units.Structure>()
+                        .Select(s => MapStructureToDefinition(s))
+                        .ToList()
+                };
+
+                _cachedExport = mission;
+                _cachedExportTick = worldState.Tick;
+
+                return Ok(mission);
+            }
         }
 
         private UnitDefinitionDto MapUnitToDefinition(Domain.Unit u)
