@@ -1,6 +1,7 @@
 using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 using WarSim.Logging;
+using WarSim.Services;
 
 namespace WarSim.Simulation.Weapons
 {
@@ -8,10 +9,12 @@ namespace WarSim.Simulation.Weapons
     {
         private readonly Random _rand = new();
         private readonly WeaponFactory _factory;
+        private readonly DamageConfigService _damageConfig;
 
-        public SimpleWeaponSystem(WeaponFactory factory)
+        public SimpleWeaponSystem(WeaponFactory factory, DamageConfigService damageConfig)
         {
             _factory = factory;
+            _damageConfig = damageConfig;
         }
 
         public IEnumerable<Projectile> TryFire(Unit unit, WorldState snapshot)
@@ -108,9 +111,6 @@ namespace WarSim.Simulation.Weapons
 
                     if (bestDist <= threshold)
                     {
-                        // apply damage
-                        target.Health -= p.Damage;
-
                         var projectileType = p switch
                         {
                             Bullet => "Bullet",
@@ -121,14 +121,22 @@ namespace WarSim.Simulation.Weapons
 
                         var ownerName = units.FirstOrDefault(u => u.Id == p.OwnerUnitId)?.Name ?? "Unknown";
 
+                        // Calculate damage using damage config service
+                        var finalDamage = _damageConfig.CalculateDamage(projectileType, target, p.Damage);
+                        
+                        // Apply damage
+                        target.Health -= finalDamage;
+
                         if (target.Health <= 0)
                         {
                             target.Status = UnitStatus.Destroyed;
-                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Warning, $"⚔️ {ownerName} DESTROYED {target.Name} with {projectileType} (dealt {p.Damage} damage)");
+                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Warning, 
+                                $"⚔️ {ownerName} DESTROYED {target.Name} with {projectileType} (dealt {finalDamage:F1} damage)");
                         }
                         else
                         {
-                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Information, $"💥 {ownerName} HIT {target.Name} with {projectileType} for {p.Damage} damage (HP: {target.Health:F1})");
+                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Information, 
+                                $"💥 {ownerName} HIT {target.Name} with {projectileType} for {finalDamage:F1} damage (HP: {target.Health:F1})");
                         }
 
                         // return projectile to pool

@@ -25,6 +25,7 @@ namespace WarSim.Simulation.AI
             RegisterState(new PatrolState());
             RegisterState(new EngageState());
             RegisterState(new RetreatState());
+            RegisterState(new RearmState());
         }
 
         private void RegisterState(AIState state)

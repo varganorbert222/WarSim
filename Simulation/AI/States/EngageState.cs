@@ -78,9 +78,11 @@ namespace WarSim.Simulation.AI.States
                 return "Patrol";
             }
 
-            // TODO: Check ammo -> Rearm
-            // if (context.Unit.GetAmmoPercent() < context.Behavior.RearmAmmoThreshold)
-            //     return "Rearm";
+            // Check ammo -> Rearm
+            if (context.Unit.GetAmmoPercent() < context.Behavior.RearmAmmoThreshold)
+            {
+                return "Rearm";
+            }
 
             return null;
         }

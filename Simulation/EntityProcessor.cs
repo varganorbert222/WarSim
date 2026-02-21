@@ -24,7 +24,8 @@ namespace WarSim.Simulation
                     VisionRangeMeters = a.VisionRangeMeters,
                     MaxAltitude = a.MaxAltitude,
                     Airspeed = a.Airspeed,
-                    Capacity = a.Capacity
+                    Capacity = a.Capacity,
+                    WeaponSlots = a.WeaponSlots.Select(CloneWeaponSlot).ToList()
                 };
                 n.Id = a.Id;
                 return n;
@@ -43,7 +44,8 @@ namespace WarSim.Simulation
                     Health = h.Health,
                     FactionId = h.FactionId,
                     VisionRangeMeters = h.VisionRangeMeters,
-                    Airspeed = h.Airspeed
+                    Airspeed = h.Airspeed,
+                    WeaponSlots = h.WeaponSlots.Select(CloneWeaponSlot).ToList()
                 };
                 n.Id = h.Id;
                 return n;
@@ -62,7 +64,8 @@ namespace WarSim.Simulation
                     FactionId = i.FactionId,
                     VisionRangeMeters = i.VisionRangeMeters,
                     Strength = i.Strength,
-                    GroundSpeed = i.GroundSpeed
+                    GroundSpeed = i.GroundSpeed,
+                    WeaponSlots = i.WeaponSlots.Select(CloneWeaponSlot).ToList()
                 };
                 n.Id = i.Id;
                 return n;
@@ -82,7 +85,8 @@ namespace WarSim.Simulation
                     FactionId = v.FactionId,
                     VisionRangeMeters = v.VisionRangeMeters,
                     GroundSpeed = v.GroundSpeed,
-                    Crew = v.Crew
+                    Crew = v.Crew,
+                    WeaponSlots = v.WeaponSlots.Select(CloneWeaponSlot).ToList()
                 };
                 n.Id = v.Id;
                 return n;
@@ -102,7 +106,8 @@ namespace WarSim.Simulation
                     FactionId = s.FactionId,
                     VisionRangeMeters = s.VisionRangeMeters,
                     SpeedKnots = s.SpeedKnots,
-                    Crew = s.Crew
+                    Crew = s.Crew,
+                    WeaponSlots = s.WeaponSlots.Select(CloneWeaponSlot).ToList()
                 };
                 n.Id = s.Id;
                 return n;
@@ -120,7 +125,8 @@ namespace WarSim.Simulation
                     Status = st.Status,
                     Health = st.Health,
                     FactionId = st.FactionId,
-                    VisionRangeMeters = st.VisionRangeMeters
+                    VisionRangeMeters = st.VisionRangeMeters,
+                    WeaponSlots = st.WeaponSlots.Select(CloneWeaponSlot).ToList()
                 };
                 n.Id = st.Id;
                 return n;
@@ -231,6 +237,20 @@ namespace WarSim.Simulation
 
             obj.Latitude = lat + dLat;
             obj.Longitude = lon + dLon;
+        }
+
+        private static Domain.Weapons.WeaponSlot CloneWeaponSlot(Domain.Weapons.WeaponSlot slot)
+        {
+            return new Domain.Weapons.WeaponSlot
+            {
+                WeaponId = slot.WeaponId,
+                Count = slot.Count,
+                CurrentAmmo = slot.CurrentAmmo,
+                CurrentMagazine = slot.CurrentMagazine,
+                LastFireTime = slot.LastFireTime,
+                IsReloading = slot.IsReloading,
+                ReloadStartTime = slot.ReloadStartTime
+            };
         }
     }
 

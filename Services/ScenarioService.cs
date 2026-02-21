@@ -3,6 +3,7 @@ using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 using WarSim.Domain.Units;
 using WarSim.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
@@ -13,10 +14,12 @@ namespace WarSim.Services
     public class ScenarioService
     {
         private readonly ILogger<ScenarioService> _logger;
+        private readonly WeaponConfigService _weaponConfig;
 
-        public ScenarioService(ILogger<ScenarioService> logger)
+        public ScenarioService(ILogger<ScenarioService> logger, WeaponConfigService weaponConfig)
         {
             _logger = logger;
+            _weaponConfig = weaponConfig;
         }
 
         public WorldState LoadScenarioFromFile(string filePath)
@@ -131,7 +134,40 @@ namespace WarSim.Services
             // Set speed based on unit type
             SetUnitSpeed(unit, dto.Speed);
 
+            // Initialize weapon slots from config
+            InitializeWeapons(unit);
+
             return unit;
+        }
+
+        private void InitializeWeapons(Unit unit)
+        {
+            var loadout = _weaponConfig.GetLoadoutForUnit(unit.UnitCategory.ToString(), unit.Subcategory);
+            if (loadout == null) return;
+
+            foreach (var weaponSlot in loadout.Weapons)
+            {
+                var weapon = _weaponConfig.GetWeapon(weaponSlot.WeaponId);
+                if (weapon == null) continue;
+
+                var slot = new Domain.Weapons.WeaponSlot
+                {
+                    WeaponId = weapon.Id,
+                    Count = weaponSlot.Count,
+                    CurrentAmmo = weapon.TotalAmmo,
+                    CurrentMagazine = weapon.MagazineSize,
+                    LastFireTime = 0,
+                    IsReloading = false,
+                    ReloadStartTime = 0
+                };
+
+                unit.WeaponSlots.Add(slot);
+            }
+
+            if (unit.WeaponSlots.Any())
+            {
+                _logger.LogDebug($"Initialized {unit.WeaponSlots.Count} weapon slots for {unit.Name}");
+            }
         }
 
         private Aircraft CreateAircraft(UnitDefinitionDto dto)

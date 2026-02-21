@@ -74,6 +74,11 @@
         /// </summary>
         public string Subcategory { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Weapon loadout for this unit (managed by weapon system)
+        /// </summary>
+        public List<Weapons.WeaponSlot> WeaponSlots { get; set; } = new();
+
         public T? GetSubcategory<T>() where T : struct, Enum
         {
             if (string.IsNullOrEmpty(Subcategory))
@@ -89,5 +94,16 @@
         /// Subclasses can override to provide a more specific value.
         /// </summary>
         public virtual string Category => UnitCategory.ToString();
+
+        /// <summary>
+        /// Get total ammo percentage across all weapons
+        /// </summary>
+        public double GetAmmoPercent()
+        {
+            if (!WeaponSlots.Any()) return 1.0;
+            var totalMax = WeaponSlots.Sum(w => w.CurrentAmmo + (w.CurrentMagazine * 10)); // rough estimate
+            var totalCurrent = WeaponSlots.Sum(w => w.CurrentAmmo);
+            return totalMax > 0 ? (double)totalCurrent / totalMax : 0;
+        }
     }
 }
