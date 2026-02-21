@@ -11,16 +11,14 @@ namespace WarSim.Controllers
         private readonly ScenarioService _scenarioService;
         private readonly WorldStateService _worldState;
         private readonly MapService _mapService;
-        private MapDefinitionDto? _cachedMap;
-        private MissionDefinitionDto? _cachedExport;
-        private long _cachedExportTick = -1;
-        private readonly object _cacheLock = new();
+        private readonly ResponseCacheService _cache;
 
-        public ScenarioController(ScenarioService scenarioService, WorldStateService worldState, MapService mapService)
+        public ScenarioController(ScenarioService scenarioService, WorldStateService worldState, MapService mapService, ResponseCacheService cache)
         {
             _scenarioService = scenarioService;
             _worldState = worldState;
             _mapService = mapService;
+            _cache = cache;
         }
 
         /// <summary>
@@ -30,22 +28,22 @@ namespace WarSim.Controllers
         [HttpGet("map")]
         public ActionResult<MapDefinitionDto> GetMapDefinition()
         {
-            lock (_cacheLock)
+            var map = _cache.GetOrCreatePermanent("scenario_map", () =>
             {
-                if (_cachedMap != null)
+                var mapData = _mapService.GetCurrentMap();
+                if (mapData == null)
                 {
-                    return Ok(_cachedMap);
+                    throw new InvalidOperationException("No map loaded");
                 }
+                return mapData;
+            });
 
-                var map = _mapService.GetCurrentMap();
-                if (map == null)
-                {
-                    return NotFound(new { error = "No map loaded" });
-                }
-
-                _cachedMap = map;
-                return Ok(_cachedMap);
+            if (map == null)
+            {
+                return NotFound(new { error = "No map loaded" });
             }
+
+            return Ok(map);
         }
 
         /// <summary>
@@ -63,13 +61,8 @@ namespace WarSim.Controllers
                 var newWorldState = _scenarioService.LoadMissionFromJson(json);
                 _worldState.UpdateState(newWorldState);
 
-                // Invalidate caches
-                lock (_cacheLock)
-                {
-                    _cachedMap = null;
-                    _cachedExport = null;
-                    _cachedExportTick = -1;
-                }
+                // Invalidate all caches when loading new mission
+                _cache.ClearAll();
 
                 WarSim.Logging.ConsoleColorLogger.Log("API", Microsoft.Extensions.Logging.LogLevel.Warning,
                     $"🔄 Mission loaded: '{missionDto.MissionName}' with {missionDto.Units.Count} units + {missionDto.StaticStructures.Count} structures");
@@ -95,18 +88,12 @@ namespace WarSim.Controllers
         [HttpGet("export")]
         public ActionResult<MissionDefinitionDto> ExportMission()
         {
-            var worldState = _worldState.GetSnapshot();
-
-            lock (_cacheLock)
+            var mission = _cache.GetOrCreate("scenario_export", () =>
             {
-                if (_cachedExport != null && _cachedExportTick == worldState.Tick)
-                {
-                    return Ok(_cachedExport);
-                }
-
+                var worldState = _worldState.GetSnapshot();
                 var map = _mapService.GetCurrentMap();
 
-                var mission = new MissionDefinitionDto
+                return new MissionDefinitionDto
                 {
                     MissionName = "Exported Mission",
                     Description = "Mission exported from running simulation",
@@ -128,12 +115,9 @@ namespace WarSim.Controllers
                         .Select(s => MapStructureToDefinition(s))
                         .ToList()
                 };
+            });
 
-                _cachedExport = mission;
-                _cachedExportTick = worldState.Tick;
-
-                return Ok(mission);
-            }
+            return Ok(mission);
         }
 
         private UnitDefinitionDto MapUnitToDefinition(Domain.Unit u)

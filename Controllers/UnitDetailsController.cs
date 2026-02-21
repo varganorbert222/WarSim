@@ -10,13 +10,13 @@ namespace WarSim.Controllers
     {
         private readonly WorldStateService _worldState;
         private readonly UnitInfoService _unitInfo;
-        private readonly Dictionary<string, (long tick, object data)> _cache = new();
-        private readonly object _cacheLock = new();
+        private readonly ResponseCacheService _cache;
 
-        public UnitDetailsController(WorldStateService worldState, UnitInfoService unitInfo)
+        public UnitDetailsController(WorldStateService worldState, UnitInfoService unitInfo, ResponseCacheService cache)
         {
             _worldState = worldState;
             _unitInfo = unitInfo;
+            _cache = cache;
         }
 
         /// <summary>
@@ -28,25 +28,22 @@ namespace WarSim.Controllers
             var snapshot = _worldState.GetSnapshot();
             var cacheKey = $"unit_{unitId}_{requestorFactionId}";
 
-            lock (_cacheLock)
+            var detailedInfo = _cache.GetOrCreate(cacheKey, snapshot.Tick, () =>
             {
-                if (_cache.TryGetValue(cacheKey, out var cached) && cached.tick == snapshot.Tick)
-                {
-                    return Ok(cached.data);
-                }
-
                 var unit = snapshot.Units.FirstOrDefault(u => u.Id == unitId);
-
                 if (unit == null)
                 {
-                    return NotFound(new { error = $"Unit with ID {unitId} not found" });
+                    return null;
                 }
+                return _unitInfo.CreateDetailedUnitDto(unit, snapshot, requestorFactionId);
+            });
 
-                var detailedInfo = _unitInfo.CreateDetailedUnitDto(unit, snapshot, requestorFactionId);
-                _cache[cacheKey] = (snapshot.Tick, detailedInfo);
-
-                return Ok(detailedInfo);
+            if (detailedInfo == null)
+            {
+                return NotFound(new { error = $"Unit with ID {unitId} not found" });
             }
+
+            return Ok(detailedInfo);
         }
 
         /// <summary>
@@ -58,13 +55,8 @@ namespace WarSim.Controllers
             var snapshot = _worldState.GetSnapshot();
             var cacheKey = $"all_{factionId}_{requestorFactionId}";
 
-            lock (_cacheLock)
+            var detailedInfoList = _cache.GetOrCreate(cacheKey, snapshot.Tick, () =>
             {
-                if (_cache.TryGetValue(cacheKey, out var cached) && cached.tick == snapshot.Tick)
-                {
-                    return Ok(cached.data);
-                }
-
                 var units = snapshot.Units.AsEnumerable();
 
                 if (factionId.HasValue)
@@ -72,14 +64,12 @@ namespace WarSim.Controllers
                     units = units.Where(u => u.FactionId == factionId.Value);
                 }
 
-                var detailedInfoList = units
+                return units
                     .Select(u => _unitInfo.CreateDetailedUnitDto(u, snapshot, requestorFactionId))
                     .ToList();
+            });
 
-                _cache[cacheKey] = (snapshot.Tick, detailedInfoList);
-
-                return Ok(detailedInfoList);
-            }
+            return Ok(detailedInfoList);
         }
 
         /// <summary>

@@ -11,13 +11,12 @@ namespace WarSim.Controllers
     public class MovementController : ControllerBase
     {
         private readonly WorldStateService _world;
-        private MovementSnapshotDto? _cachedSnapshot;
-        private long _cachedTick = -1;
-        private readonly object _cacheLock = new();
+        private readonly ResponseCacheService _cache;
 
-        public MovementController(WorldStateService world)
+        public MovementController(WorldStateService world, ResponseCacheService cache)
         {
             _world = world;
+            _cache = cache;
         }
 
         /// <summary>
@@ -28,33 +27,22 @@ namespace WarSim.Controllers
         [HttpGet("snapshot")]
         public ActionResult<MovementSnapshotDto> GetSnapshot()
         {
-            var snap = _world.GetSnapshot();
-
-            // Check if we can return cached snapshot
-            lock (_cacheLock)
+            var dto = _cache.GetOrCreate("movement_snapshot", () =>
             {
-                if (_cachedSnapshot != null && _cachedTick == snap.Tick)
-                {
-                    // Update timestamp for each request but return cached data
-                    _cachedSnapshot.Timestamp = DateTime.UtcNow;
-                    return Ok(_cachedSnapshot);
-                }
-
-                // Build new snapshot
-                var dto = new MovementSnapshotDto
+                var snap = _world.GetSnapshot();
+                return new MovementSnapshotDto
                 {
                     Tick = snap.Tick,
                     Timestamp = DateTime.UtcNow,
                     Units = snap.Units.Select(MapUnitToMovement).ToList(),
                     Projectiles = snap.Projectiles.Select(MapProjectileToMovement).ToList()
                 };
+            });
 
-                // Cache it
-                _cachedSnapshot = dto;
-                _cachedTick = snap.Tick;
+            // Update timestamp for each request
+            dto.Timestamp = DateTime.UtcNow;
 
-                return Ok(dto);
-            }
+            return Ok(dto);
         }
 
         private static UnitMovementDto MapUnitToMovement(Domain.Unit u)

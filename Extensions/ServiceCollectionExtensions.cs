@@ -20,6 +20,7 @@ namespace WarSim.Extensions
             _ = services.AddSingleton<WarSim.Services.DamageConfigService>();
             _ = services.AddSingleton<WarSim.Services.ScenarioService>();
             _ = services.AddSingleton<WarSim.Services.UnitInfoService>();
+            _ = services.AddSingleton<WarSim.Services.ResponseCacheService>();
             _ = services.AddHostedService<WarSim.Services.SimulationHostedService>();
 
             return services;

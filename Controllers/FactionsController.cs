@@ -9,31 +9,28 @@ namespace WarSim.Controllers
     public class FactionsController : ControllerBase
     {
         private readonly FactionService _factions;
-        private IEnumerable<Faction>? _cachedFactions;
-        private readonly object _cacheLock = new();
+        private readonly ResponseCacheService _cache;
 
-        public FactionsController(FactionService factions)
+        public FactionsController(FactionService factions, ResponseCacheService cache)
         {
             _factions = factions;
+            _cache = cache;
         }
 
         /// <summary>
-        /// Get all factions. Cached until factions are modified.
+        /// Get all factions. Permanently cached until invalidated.
         /// </summary>
         [HttpGet]
         public ActionResult<IEnumerable<Faction>> Get()
         {
-            lock (_cacheLock)
+            var factions = _cache.GetOrCreatePermanent("factions_all", () =>
             {
-                if (_cachedFactions == null)
-                {
-                    WarSim.Logging.ConsoleColorLogger.Log("API.Controllers.FactionsController", 
-                        Microsoft.Extensions.Logging.LogLevel.Information, "Get factions request (cache miss)");
-                    _cachedFactions = _factions.GetFactions().ToList();
-                }
+                WarSim.Logging.ConsoleColorLogger.Log("API.Controllers.FactionsController",
+                    Microsoft.Extensions.Logging.LogLevel.Information, "Get factions request (cache miss)");
+                return _factions.GetFactions().ToList();
+            });
 
-                return Ok(_cachedFactions);
-            }
+            return Ok(factions);
         }
 
         public record AlliesUpdateDto(int[] Allies);
@@ -48,12 +45,9 @@ namespace WarSim.Controllers
             }
 
             // Invalidate cache when factions are modified
-            lock (_cacheLock)
-            {
-                _cachedFactions = null;
-            }
+            _cache.Invalidate("factions_all");
 
-            WarSim.Logging.ConsoleColorLogger.Log("API.Controllers.FactionsController", 
+            WarSim.Logging.ConsoleColorLogger.Log("API.Controllers.FactionsController",
                 Microsoft.Extensions.Logging.LogLevel.Information, $"Updated allies for faction {id}, cache invalidated");
             return NoContent();
         }
