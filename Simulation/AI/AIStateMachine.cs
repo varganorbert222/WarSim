@@ -1,6 +1,5 @@
-using WarSim.Simulation.AI.States;
-using Microsoft.Extensions.Logging;
 using WarSim.Domain;
+using WarSim.Simulation.AI.States;
 
 namespace WarSim.Simulation.AI
 {
@@ -55,7 +54,7 @@ namespace WarSim.Simulation.AI
             }
 
             var (currentState, context) = stateInfo;
-            
+
             // Update context with latest data
             context.Unit = unit;
             context.WorldSnapshot = snapshot;
@@ -68,7 +67,7 @@ namespace WarSim.Simulation.AI
             var nextStateName = currentState.CheckTransitions(context);
             if (nextStateName != null && _states.TryGetValue(nextStateName, out var nextState))
             {
-                Logging.ConsoleColorLogger.Log("AI.StateMachine", Microsoft.Extensions.Logging.LogLevel.Debug, 
+                Logging.ConsoleColorLogger.Log("AI.StateMachine", Microsoft.Extensions.Logging.LogLevel.Debug,
                     $"Unit {unit.Name} transition: {currentState.Name} → {nextStateName}");
 
                 currentState.OnExit(context);

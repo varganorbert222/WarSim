@@ -1,6 +1,5 @@
 using System.Text.Json;
 using WarSim.DTOs;
-using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
@@ -17,7 +16,7 @@ namespace WarSim.Services
         public MapDefinitionDto LoadMap(string mapId)
         {
             var path = Path.Combine("Data", "Maps", $"{mapId}-map.json");
-            
+
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException($"Map file not found: {path}");
@@ -39,7 +38,10 @@ namespace WarSim.Services
             return map;
         }
 
-        public MapDefinitionDto? GetCurrentMap() => _currentMap;
+        public MapDefinitionDto? GetCurrentMap()
+        {
+            return _currentMap;
+        }
 
         public AirbaseDto? GetAirbase(string airbaseId)
         {

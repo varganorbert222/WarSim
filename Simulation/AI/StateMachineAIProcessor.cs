@@ -1,7 +1,5 @@
-using WarSim.Domain;
-using WarSim.Simulation.AI;
-using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using WarSim.Domain;
 
 namespace WarSim.Simulation.AI
 {
@@ -17,7 +15,7 @@ namespace WarSim.Simulation.AI
         public StateMachineAIProcessor(ILogger<StateMachineAIProcessor> logger)
         {
             _logger = logger;
-            _stateMachine = new AIStateMachine(_logger as ILogger<AIStateMachine> ?? 
+            _stateMachine = new AIStateMachine(_logger as ILogger<AIStateMachine> ??
                 Microsoft.Extensions.Logging.Abstractions.NullLogger<AIStateMachine>.Instance);
             LoadBehaviors();
         }
@@ -52,7 +50,7 @@ namespace WarSim.Simulation.AI
         {
             // Get behavior config for this unit type
             var behavior = GetBehaviorForUnit(unit);
-            
+
             // Process through state machine
             return _stateMachine.ProcessUnit(unit, snapshot, behavior);
         }

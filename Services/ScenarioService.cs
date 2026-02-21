@@ -3,7 +3,6 @@ using WarSim.Domain;
 using WarSim.Domain.Projectiles;
 using WarSim.Domain.Units;
 using WarSim.DTOs;
-using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
@@ -48,7 +47,7 @@ namespace WarSim.Services
             }
 
             // Load the map
-            _mapService.LoadMap(missionDto.MapId);
+            _ = _mapService.LoadMap(missionDto.MapId);
 
             return BuildWorldStateFromMission(missionDto);
         }
@@ -64,10 +63,10 @@ namespace WarSim.Services
             }).ToList();
 
             var units = new List<Unit>();
-            
+
             // Add dynamic units
             units.AddRange(mission.Units.Select(u => CreateUnitFromDto(u)));
-            
+
             // Add static structures
             units.AddRange(mission.StaticStructures.Select(s => CreateStructureFromDto(s)));
 
@@ -130,57 +129,6 @@ namespace WarSim.Services
             return structure;
         }
 
-        public ScenarioDefinitionDto ExportScenarioToDto(WorldState worldState)
-        {
-            var dto = new ScenarioDefinitionDto
-            {
-                Name = "Exported Scenario",
-                Description = "Scenario exported from running simulation",
-                Factions = worldState.Factions.Select(f => new FactionDefinitionDto
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    Color = f.Color,
-                    Allies = f.Allies.ToList()
-                }).ToList(),
-                Units = worldState.Units.Select(u => new UnitDefinitionDto
-                {
-                    Name = u.Name,
-                    Category = u.UnitCategory.ToString(),
-                    Subcategory = u.Subcategory,
-                    Latitude = u.Latitude,
-                    Longitude = u.Longitude,
-                    Heading = u.Heading,
-                    Speed = GetUnitSpeed(u),
-                    Status = u.Status.ToString(),
-                    FactionId = u.FactionId,
-                    Health = u.Health,
-                    VisionRangeMeters = u.VisionRangeMeters,
-                    Properties = ExtractUnitProperties(u)
-                }).ToList()
-            };
-
-            return dto;
-        }
-
-        private WorldState BuildWorldStateFromDto(ScenarioDefinitionDto dto)
-        {
-            var factions = dto.Factions.Select(f => new Faction
-            {
-                Id = f.Id,
-                Name = f.Name,
-                Color = f.Color,
-                Allies = f.Allies.ToList()
-            }).ToList();
-
-            var units = dto.Units.Select(u => CreateUnitFromDto(u)).ToList();
-            var projectiles = new List<Projectile>();
-
-            _logger.LogInformation($"Loaded scenario '{dto.Name}' with {units.Count} units and {factions.Count} factions");
-
-            return new WorldState(units, projectiles, factions, 0);
-        }
-
         private Unit CreateUnitFromDto(UnitDefinitionDto dto)
         {
             if (!Enum.TryParse<UnitCategory>(dto.Category, true, out var category))
@@ -225,12 +173,18 @@ namespace WarSim.Services
         private void InitializeWeapons(Unit unit)
         {
             var loadout = _weaponConfig.GetLoadoutForUnit(unit.UnitCategory.ToString(), unit.Subcategory);
-            if (loadout == null) return;
+            if (loadout == null)
+            {
+                return;
+            }
 
             foreach (var weaponSlot in loadout.Weapons)
             {
                 var weapon = _weaponConfig.GetWeapon(weaponSlot.WeaponId);
-                if (weapon == null) continue;
+                if (weapon == null)
+                {
+                    continue;
+                }
 
                 var slot = new Domain.Weapons.WeaponSlot
                 {
@@ -405,34 +359,6 @@ namespace WarSim.Services
         {
             var missionPath = Path.Combine("Data", "Missions", "caucasus-default.json");
             return LoadMissionFromFile(missionPath);
-        }
-
-        [Obsolete("Use LoadMissionFromFile instead")]
-        public WorldState LoadScenarioFromFile(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException($"Scenario file not found: {filePath}");
-            }
-
-            var json = File.ReadAllText(filePath);
-            return LoadScenarioFromJson(json);
-        }
-
-        [Obsolete("Use LoadMissionFromJson instead")]
-        public WorldState LoadScenarioFromJson(string json)
-        {
-            var scenarioDto = JsonSerializer.Deserialize<ScenarioDefinitionDto>(json, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (scenarioDto == null)
-            {
-                throw new InvalidOperationException("Failed to deserialize scenario JSON");
-            }
-
-            return BuildWorldStateFromDto(scenarioDto);
         }
     }
 }

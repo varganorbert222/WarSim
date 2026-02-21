@@ -7,16 +7,34 @@ namespace WarSim.Simulation.AI
     /// </summary>
     public class AIContext
     {
-        public Unit Unit { get; set; }
-        public WorldState WorldSnapshot { get; set; }
-        public AIBehaviorConfig Behavior { get; set; }
+        public Unit Unit
+        {
+            get; set;
+        }
+        public WorldState WorldSnapshot
+        {
+            get; set;
+        }
+        public AIBehaviorConfig Behavior
+        {
+            get; set;
+        }
         public List<Commands.ICommand> PendingCommands { get; set; } = new();
-        
+
         // State machine runtime data
         public Dictionary<string, object> StateData { get; set; } = new();
-        public Unit? CurrentTarget { get; set; }
-        public double TimeInState { get; set; }
-        public string? LastStateName { get; set; }
+        public Unit? CurrentTarget
+        {
+            get; set;
+        }
+        public double TimeInState
+        {
+            get; set;
+        }
+        public string? LastStateName
+        {
+            get; set;
+        }
 
         public AIContext(Unit unit, WorldState snapshot, AIBehaviorConfig behavior)
         {

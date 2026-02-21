@@ -44,16 +44,28 @@ namespace WarSim.DTOs
         public string Subcategory { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("heading")]
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         [JsonPropertyName("factionId")]
-        public int FactionId { get; set; }
+        public int FactionId
+        {
+            get; set;
+        }
 
         [JsonPropertyName("health")]
         public double Health { get; set; } = 100.0;

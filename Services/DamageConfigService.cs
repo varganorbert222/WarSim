@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
@@ -38,7 +37,7 @@ namespace WarSim.Services
         {
             var multiplier = GetDamageMultiplier(projectileType, target);
             var armor = GetArmorValue(target);
-            
+
             // Damage formula: (baseDamage * multiplier) - (armor * 0.1)
             var finalDamage = (baseDamage * multiplier) - (armor * 0.1);
             return Math.Max(finalDamage, baseDamage * 0.1); // minimum 10% damage always applies
@@ -46,7 +45,10 @@ namespace WarSim.Services
 
         public double GetDamageMultiplier(string projectileType, Domain.Unit target)
         {
-            if (_config == null) return 1.0;
+            if (_config == null)
+            {
+                return 1.0;
+            }
 
             // First try exact match (category + subcategory)
             var exact = _config.DamageMultipliers.FirstOrDefault(m =>
@@ -55,7 +57,10 @@ namespace WarSim.Services
                 !string.IsNullOrEmpty(m.TargetSubcategory) &&
                 m.TargetSubcategory.Equals(target.Subcategory, StringComparison.OrdinalIgnoreCase));
 
-            if (exact != null) return exact.Multiplier;
+            if (exact != null)
+            {
+                return exact.Multiplier;
+            }
 
             // Then try category match only
             var category = _config.DamageMultipliers.FirstOrDefault(m =>
@@ -68,14 +73,20 @@ namespace WarSim.Services
 
         public double GetArmorValue(Domain.Unit unit)
         {
-            if (_config == null) return 0;
+            if (_config == null)
+            {
+                return 0;
+            }
 
             // First try exact match
             var exact = _config.ArmorValues.FirstOrDefault(a =>
                 a.UnitCategory.Equals(unit.UnitCategory.ToString(), StringComparison.OrdinalIgnoreCase) &&
                 a.UnitSubcategory.Equals(unit.Subcategory, StringComparison.OrdinalIgnoreCase));
 
-            if (exact != null) return exact.ArmorPoints;
+            if (exact != null)
+            {
+                return exact.ArmorPoints;
+            }
 
             // Then try category default
             var category = _config.ArmorValues.FirstOrDefault(a =>

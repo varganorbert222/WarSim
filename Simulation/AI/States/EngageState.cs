@@ -94,7 +94,7 @@ namespace WarSim.Simulation.AI.States
             var avgLat = (u1.Latitude + u2.Latitude) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (u2.Longitude - u1.Longitude) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
 
         private double HeadingTo(Domain.Unit from, Domain.Unit to)
@@ -102,7 +102,11 @@ namespace WarSim.Simulation.AI.States
             var dy = to.Latitude - from.Latitude;
             var dx = to.Longitude - from.Longitude;
             var angle = Math.Atan2(dx, dy) * 180.0 / Math.PI;
-            if (angle < 0) angle += 360.0;
+            if (angle < 0)
+            {
+                angle += 360.0;
+            }
+
             return angle;
         }
     }

@@ -10,7 +10,7 @@ namespace WarSim.Simulation.AI.States
         public override void OnEnter(AIContext context)
         {
             context.Unit.Status = Domain.UnitStatus.Moving;
-            
+
             // TODO: Find nearest friendly base/supply point
             // For now, just slow down and simulate rearming
             var slowSpeed = context.Unit switch
@@ -86,7 +86,7 @@ namespace WarSim.Simulation.AI.States
             var avgLat = (u1.Latitude + u2.Latitude) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (u2.Longitude - u1.Longitude) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
     }
 }

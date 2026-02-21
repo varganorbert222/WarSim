@@ -8,7 +8,10 @@ namespace WarSim.DTOs
     public class DetailedUnitDto
     {
         [JsonPropertyName("id")]
-        public Guid Id { get; set; }
+        public Guid Id
+        {
+            get; set;
+        }
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
@@ -52,7 +55,10 @@ namespace WarSim.DTOs
 
         // AI state (if AI controlled)
         [JsonPropertyName("aiState")]
-        public AIStateDto? AIState { get; set; }
+        public AIStateDto? AIState
+        {
+            get; set;
+        }
 
         // Unit specifications
         [JsonPropertyName("specifications")]
@@ -66,82 +72,148 @@ namespace WarSim.DTOs
     public class PositionDto
     {
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("altitude")]
-        public double? Altitude { get; set; }
+        public double? Altitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("heading")]
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
     }
 
     public class VelocityDto
     {
         [JsonPropertyName("speed")]
-        public double Speed { get; set; }
+        public double Speed
+        {
+            get; set;
+        }
 
         [JsonPropertyName("speedKnots")]
-        public double? SpeedKnots { get; set; }
+        public double? SpeedKnots
+        {
+            get; set;
+        }
 
         [JsonPropertyName("groundSpeed")]
-        public double? GroundSpeed { get; set; }
+        public double? GroundSpeed
+        {
+            get; set;
+        }
 
         [JsonPropertyName("airspeed")]
-        public double? Airspeed { get; set; }
+        public double? Airspeed
+        {
+            get; set;
+        }
 
         [JsonPropertyName("velocityX")]
-        public double VelocityX { get; set; }
+        public double VelocityX
+        {
+            get; set;
+        }
 
         [JsonPropertyName("velocityY")]
-        public double VelocityY { get; set; }
+        public double VelocityY
+        {
+            get; set;
+        }
 
         [JsonPropertyName("climbRate")]
-        public double? ClimbRate { get; set; }
+        public double? ClimbRate
+        {
+            get; set;
+        }
     }
 
     public class DirectionVectorDto
     {
         [JsonPropertyName("heading")]
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         [JsonPropertyName("normalizedX")]
-        public double NormalizedX { get; set; }
+        public double NormalizedX
+        {
+            get; set;
+        }
 
         [JsonPropertyName("normalizedY")]
-        public double NormalizedY { get; set; }
+        public double NormalizedY
+        {
+            get; set;
+        }
 
         [JsonPropertyName("normalizedZ")]
-        public double NormalizedZ { get; set; }
+        public double NormalizedZ
+        {
+            get; set;
+        }
     }
 
     public class HealthDto
     {
         [JsonPropertyName("current")]
-        public double Current { get; set; }
+        public double Current
+        {
+            get; set;
+        }
 
         [JsonPropertyName("maximum")]
-        public double Maximum { get; set; }
+        public double Maximum
+        {
+            get; set;
+        }
 
         [JsonPropertyName("percentage")]
-        public double Percentage { get; set; }
+        public double Percentage
+        {
+            get; set;
+        }
 
         [JsonPropertyName("armor")]
-        public double Armor { get; set; }
+        public double Armor
+        {
+            get; set;
+        }
 
         [JsonPropertyName("isDestroyed")]
-        public bool IsDestroyed { get; set; }
+        public bool IsDestroyed
+        {
+            get; set;
+        }
 
         [JsonPropertyName("isDamaged")]
-        public bool IsDamaged { get; set; }
+        public bool IsDamaged
+        {
+            get; set;
+        }
     }
 
     public class FactionInfoDto
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public int Id
+        {
+            get; set;
+        }
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
@@ -150,19 +222,31 @@ namespace WarSim.DTOs
         public string Color { get; set; } = string.Empty;
 
         [JsonPropertyName("isAlly")]
-        public bool IsAlly { get; set; }
+        public bool IsAlly
+        {
+            get; set;
+        }
 
         [JsonPropertyName("isEnemy")]
-        public bool IsEnemy { get; set; }
+        public bool IsEnemy
+        {
+            get; set;
+        }
     }
 
     public class VisionDto
     {
         [JsonPropertyName("rangeMeters")]
-        public double RangeMeters { get; set; }
+        public double RangeMeters
+        {
+            get; set;
+        }
 
         [JsonPropertyName("detectionRangeMeters")]
-        public double DetectionRangeMeters { get; set; }
+        public double DetectionRangeMeters
+        {
+            get; set;
+        }
 
         [JsonPropertyName("visibleEnemies")]
         public List<Guid> VisibleEnemies { get; set; } = new();
@@ -171,10 +255,16 @@ namespace WarSim.DTOs
         public List<Guid> VisibleAllies { get; set; } = new();
 
         [JsonPropertyName("hasRadar")]
-        public bool HasRadar { get; set; }
+        public bool HasRadar
+        {
+            get; set;
+        }
 
         [JsonPropertyName("radarRangeMeters")]
-        public double? RadarRangeMeters { get; set; }
+        public double? RadarRangeMeters
+        {
+            get; set;
+        }
     }
 
     public class WeaponStatusDto
@@ -186,52 +276,94 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("count")]
-        public int Count { get; set; }
+        public int Count
+        {
+            get; set;
+        }
 
         [JsonPropertyName("projectileType")]
         public string ProjectileType { get; set; } = string.Empty;
 
         [JsonPropertyName("currentAmmo")]
-        public int CurrentAmmo { get; set; }
+        public int CurrentAmmo
+        {
+            get; set;
+        }
 
         [JsonPropertyName("maxAmmo")]
-        public int MaxAmmo { get; set; }
+        public int MaxAmmo
+        {
+            get; set;
+        }
 
         [JsonPropertyName("currentMagazine")]
-        public int CurrentMagazine { get; set; }
+        public int CurrentMagazine
+        {
+            get; set;
+        }
 
         [JsonPropertyName("magazineSize")]
-        public int MagazineSize { get; set; }
+        public int MagazineSize
+        {
+            get; set;
+        }
 
         [JsonPropertyName("damage")]
-        public double Damage { get; set; }
+        public double Damage
+        {
+            get; set;
+        }
 
         [JsonPropertyName("rangeMeters")]
-        public double RangeMeters { get; set; }
+        public double RangeMeters
+        {
+            get; set;
+        }
 
         [JsonPropertyName("rateOfFire")]
-        public double RateOfFire { get; set; }
+        public double RateOfFire
+        {
+            get; set;
+        }
 
         [JsonPropertyName("isReloading")]
-        public bool IsReloading { get; set; }
+        public bool IsReloading
+        {
+            get; set;
+        }
 
         [JsonPropertyName("canFire")]
-        public bool CanFire { get; set; }
+        public bool CanFire
+        {
+            get; set;
+        }
     }
 
     public class AmmoStatusDto
     {
         [JsonPropertyName("totalAmmoPercentage")]
-        public double TotalAmmoPercentage { get; set; }
+        public double TotalAmmoPercentage
+        {
+            get; set;
+        }
 
         [JsonPropertyName("totalRoundsRemaining")]
-        public int TotalRoundsRemaining { get; set; }
+        public int TotalRoundsRemaining
+        {
+            get; set;
+        }
 
         [JsonPropertyName("isLowAmmo")]
-        public bool IsLowAmmo { get; set; }
+        public bool IsLowAmmo
+        {
+            get; set;
+        }
 
         [JsonPropertyName("isOutOfAmmo")]
-        public bool IsOutOfAmmo { get; set; }
+        public bool IsOutOfAmmo
+        {
+            get; set;
+        }
     }
 
     public class AIStateDto
@@ -240,13 +372,22 @@ namespace WarSim.DTOs
         public string CurrentState { get; set; } = string.Empty;
 
         [JsonPropertyName("lastState")]
-        public string? LastState { get; set; }
+        public string? LastState
+        {
+            get; set;
+        }
 
         [JsonPropertyName("timeInState")]
-        public double TimeInState { get; set; }
+        public double TimeInState
+        {
+            get; set;
+        }
 
         [JsonPropertyName("currentTarget")]
-        public TargetInfoDto? CurrentTarget { get; set; }
+        public TargetInfoDto? CurrentTarget
+        {
+            get; set;
+        }
 
         [JsonPropertyName("behavior")]
         public AIBehaviorInfoDto Behavior { get; set; } = new();
@@ -255,7 +396,10 @@ namespace WarSim.DTOs
     public class TargetInfoDto
     {
         [JsonPropertyName("unitId")]
-        public Guid UnitId { get; set; }
+        public Guid UnitId
+        {
+            get; set;
+        }
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
@@ -264,13 +408,22 @@ namespace WarSim.DTOs
         public string Category { get; set; } = string.Empty;
 
         [JsonPropertyName("distance")]
-        public double Distance { get; set; }
+        public double Distance
+        {
+            get; set;
+        }
 
         [JsonPropertyName("heading")]
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         [JsonPropertyName("inRange")]
-        public bool InRange { get; set; }
+        public bool InRange
+        {
+            get; set;
+        }
     }
 
     public class AIBehaviorInfoDto
@@ -279,12 +432,21 @@ namespace WarSim.DTOs
         public string UnitType { get; set; } = string.Empty;
 
         [JsonPropertyName("aggressionLevel")]
-        public double AggressionLevel { get; set; }
+        public double AggressionLevel
+        {
+            get; set;
+        }
 
         [JsonPropertyName("engageRange")]
-        public double EngageRange { get; set; }
+        public double EngageRange
+        {
+            get; set;
+        }
 
         [JsonPropertyName("patrolRadius")]
-        public double PatrolRadius { get; set; }
+        public double PatrolRadius
+        {
+            get; set;
+        }
     }
 }

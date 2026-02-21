@@ -40,7 +40,7 @@ namespace WarSim.Simulation.AI.States
         private List<Domain.Unit> GetEnemiesInRange(AIContext context)
         {
             return context.WorldSnapshot.Units
-                .Where(u => u.FactionId != context.Unit.FactionId && 
+                .Where(u => u.FactionId != context.Unit.FactionId &&
                            u.Status != Domain.UnitStatus.Destroyed &&
                            DistanceMeters(context.Unit, u) <= context.Unit.VisionRangeMeters)
                 .ToList();
@@ -53,7 +53,7 @@ namespace WarSim.Simulation.AI.States
             var avgLat = (u1.Latitude + u2.Latitude) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (u2.Longitude - u1.Longitude) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
     }
 }

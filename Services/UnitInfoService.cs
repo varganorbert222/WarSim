@@ -1,7 +1,5 @@
 using WarSim.Domain;
 using WarSim.DTOs;
-using WarSim.Services;
-using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
@@ -152,15 +150,21 @@ namespace WarSim.Services
             foreach (var other in worldState.Units)
             {
                 if (other.Id == unit.Id || other.Status == UnitStatus.Destroyed)
+                {
                     continue;
+                }
 
                 var distance = DistanceMeters(unit, other);
                 if (distance <= unit.VisionRangeMeters)
                 {
                     if (other.FactionId == unit.FactionId)
+                    {
                         visibleAllies.Add(other.Id);
+                    }
                     else
+                    {
                         visibleEnemies.Add(other.Id);
+                    }
                 }
             }
 
@@ -182,7 +186,10 @@ namespace WarSim.Services
             foreach (var slot in unit.WeaponSlots)
             {
                 var weapon = _weaponConfig.GetWeapon(slot.WeaponId);
-                if (weapon == null) continue;
+                if (weapon == null)
+                {
+                    continue;
+                }
 
                 weaponStatusList.Add(new WeaponStatusDto
                 {
@@ -230,7 +237,7 @@ namespace WarSim.Services
                     specs["maxAltitude"] = a.MaxAltitude ?? 0;
                     specs["capacity"] = a.Capacity ?? 0;
                     break;
-                case Domain.Units.Helicopter h:
+                case Domain.Units.Helicopter:
                     break;
                 case Domain.Units.Infantry i:
                     specs["strength"] = i.Strength ?? 0;
@@ -253,7 +260,7 @@ namespace WarSim.Services
             var avgLat = (u1.Latitude + u2.Latitude) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (u2.Longitude - u1.Longitude) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
     }
 }

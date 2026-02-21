@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using WarSim.Services;
 using WarSim.DTOs;
+using WarSim.Services;
 
 namespace WarSim.Controllers
 {
@@ -28,7 +28,10 @@ namespace WarSim.Controllers
 
             if (unit == null)
             {
-                return NotFound(new { error = $"Unit with ID {unitId} not found" });
+                return NotFound(new
+                {
+                    error = $"Unit with ID {unitId} not found"
+                });
             }
 
             var detailedInfo = _unitInfo.CreateDetailedUnitDto(unit, snapshot, requestorFactionId);
@@ -67,7 +70,7 @@ namespace WarSim.Controllers
             [FromQuery] int? requestorFactionId = null)
         {
             var snapshot = _worldState.GetSnapshot();
-            
+
             var nearbyUnits = snapshot.Units
                 .Where(u => DistanceMeters(latitude, longitude, u.Latitude, u.Longitude) <= radiusMeters)
                 .Select(u => _unitInfo.CreateDetailedUnitDto(u, snapshot, requestorFactionId))
@@ -87,11 +90,14 @@ namespace WarSim.Controllers
 
             if (unit == null)
             {
-                return NotFound(new { error = $"Unit with ID {unitId} not found" });
+                return NotFound(new
+                {
+                    error = $"Unit with ID {unitId} not found"
+                });
             }
 
             var visibleUnits = snapshot.Units
-                .Where(other => other.Id != unitId && 
+                .Where(other => other.Id != unitId &&
                                other.Status != Domain.UnitStatus.Destroyed &&
                                DistanceMeters(unit.Latitude, unit.Longitude, other.Latitude, other.Longitude) <= unit.VisionRangeMeters)
                 .Select(u => _unitInfo.CreateDetailedUnitDto(u, snapshot, unit.FactionId))
@@ -107,7 +113,7 @@ namespace WarSim.Controllers
             var avgLat = (lat1 + lat2) / 2.0 * Math.PI / 180.0;
             var metersPerDegLon = metersPerDegLat * Math.Cos(avgLat);
             var dx = (lon2 - lon1) * metersPerDegLon;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
     }
 }

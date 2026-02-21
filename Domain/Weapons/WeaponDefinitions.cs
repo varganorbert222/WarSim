@@ -56,10 +56,16 @@ namespace WarSim.Domain.Weapons
         public int Count { get; set; } = 1;
 
         [JsonPropertyName("currentAmmo")]
-        public int CurrentAmmo { get; set; }
+        public int CurrentAmmo
+        {
+            get; set;
+        }
 
         [JsonPropertyName("currentMagazine")]
-        public int CurrentMagazine { get; set; }
+        public int CurrentMagazine
+        {
+            get; set;
+        }
 
         [JsonPropertyName("lastFireTime")]
         public double LastFireTime { get; set; } = 0;

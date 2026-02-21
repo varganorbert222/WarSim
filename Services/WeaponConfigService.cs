@@ -1,6 +1,5 @@
 using System.Text.Json;
 using WarSim.Domain.Weapons;
-using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {

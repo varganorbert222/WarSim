@@ -20,25 +20,61 @@ namespace WarSim.DTOs
 
     public class UnitMovementDto
     {
-        public Guid Id { get; set; }
+        public Guid Id
+        {
+            get; set;
+        }
         public string Name { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
         public string Subcategory { get; set; } = string.Empty;
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public double? Altitude { get; set; }
-        public double Heading { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
+        public double Longitude
+        {
+            get; set;
+        }
+        public double? Altitude
+        {
+            get; set;
+        }
+        public double Heading
+        {
+            get; set;
+        }
         /// <summary>
         /// Speed in meters per second (normalized for all unit types)
         /// </summary>
-        public double SpeedMps { get; set; }
+        public double SpeedMps
+        {
+            get; set;
+        }
         public string Status { get; set; } = string.Empty;
-        public int FactionId { get; set; }
-        public double Health { get; set; }
-        public double VisionRange { get; set; }
-        public double DirectionX { get; set; }
-        public double DirectionY { get; set; }
-        public double AmmoPercentage { get; set; }
+        public int FactionId
+        {
+            get; set;
+        }
+        public double Health
+        {
+            get; set;
+        }
+        public double VisionRange
+        {
+            get; set;
+        }
+        public double DirectionX
+        {
+            get; set;
+        }
+        public double DirectionY
+        {
+            get; set;
+        }
+        public double AmmoPercentage
+        {
+            get; set;
+        }
     }
 
     public class ProjectileMovementDto

@@ -47,16 +47,28 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("elevation")]
-        public double Elevation { get; set; }
+        public double Elevation
+        {
+            get; set;
+        }
 
         [JsonPropertyName("runwayLength")]
-        public int RunwayLength { get; set; }
+        public int RunwayLength
+        {
+            get; set;
+        }
 
         [JsonPropertyName("controlFaction")]
         public string ControlFaction { get; set; } = string.Empty;
@@ -77,13 +89,22 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("population")]
-        public int Population { get; set; }
+        public int Population
+        {
+            get; set;
+        }
 
         [JsonPropertyName("controlFaction")]
         public string ControlFaction { get; set; } = string.Empty;
@@ -104,10 +125,16 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("controlFaction")]
         public string ControlFaction { get; set; } = string.Empty;
@@ -128,10 +155,16 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("type")]
         public string Type { get; set; } = string.Empty;
@@ -149,10 +182,16 @@ namespace WarSim.DTOs
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
     }
 
     public class MapStructureDto
@@ -176,16 +215,28 @@ namespace WarSim.DTOs
         public string Subcategory { get; set; } = string.Empty;
 
         [JsonPropertyName("latitude")]
-        public double Latitude { get; set; }
+        public double Latitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("longitude")]
-        public double Longitude { get; set; }
+        public double Longitude
+        {
+            get; set;
+        }
 
         [JsonPropertyName("heading")]
-        public double Heading { get; set; }
+        public double Heading
+        {
+            get; set;
+        }
 
         [JsonPropertyName("factionId")]
-        public int FactionId { get; set; }
+        public int FactionId
+        {
+            get; set;
+        }
 
         [JsonPropertyName("health")]
         public double Health { get; set; } = 100.0;

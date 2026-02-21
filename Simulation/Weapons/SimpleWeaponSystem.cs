@@ -123,19 +123,19 @@ namespace WarSim.Simulation.Weapons
 
                         // Calculate damage using damage config service
                         var finalDamage = _damageConfig.CalculateDamage(projectileType, target, p.Damage);
-                        
+
                         // Apply damage
                         target.Health -= finalDamage;
 
                         if (target.Health <= 0)
                         {
                             target.Status = UnitStatus.Destroyed;
-                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Warning, 
+                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Warning,
                                 $"⚔️ {ownerName} DESTROYED {target.Name} with {projectileType} (dealt {finalDamage:F1} damage)");
                         }
                         else
                         {
-                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Information, 
+                            ConsoleColorLogger.Log("Combat", Microsoft.Extensions.Logging.LogLevel.Information,
                                 $"💥 {ownerName} HIT {target.Name} with {projectileType} for {finalDamage:F1} damage (HP: {target.Health:F1})");
                         }
 

@@ -100,7 +100,11 @@
         /// </summary>
         public double GetAmmoPercent()
         {
-            if (!WeaponSlots.Any()) return 1.0;
+            if (!WeaponSlots.Any())
+            {
+                return 1.0;
+            }
+
             var totalMax = WeaponSlots.Sum(w => w.CurrentAmmo + (w.CurrentMagazine * 10)); // rough estimate
             var totalCurrent = WeaponSlots.Sum(w => w.CurrentAmmo);
             return totalMax > 0 ? (double)totalCurrent / totalMax : 0;
