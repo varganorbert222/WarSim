@@ -1,0 +1,70 @@
+{
+  "helicopterTypes": [
+    {
+      "id": "mi24_attack",
+      "name": "Mi-24 Hind",
+      "subcategory": "AttackHelicopter",
+      "manufacturer": "Mil",
+      "description": "Attack helicopter and troop transport",
+      "specifications": {
+        "maxSpeed": 335,
+        "cruiseSpeed": 260,
+        "combatRadius": 160000,
+        "serviceCeiling": 4500,
+        "capacity": 8,
+        "emptyWeight": 8500,
+        "maxTakeoffWeight": 12000
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "cannon_20mm", "count": 1 },
+          { "weaponId": "missile_aa_short", "count": 4 }
+        ]
+      },
+      "defaultHealth": 90,
+      "defaultVisionRange": 4000
+    },
+    {
+      "id": "uh1_transport",
+      "name": "UH-1 Huey",
+      "subcategory": "TransportHelicopter",
+      "manufacturer": "Bell",
+      "description": "Utility and transport helicopter",
+      "specifications": {
+        "maxSpeed": 217,
+        "cruiseSpeed": 185,
+        "combatRadius": 511000,
+        "serviceCeiling": 5910,
+        "capacity": 11,
+        "emptyWeight": 2363,
+        "maxTakeoffWeight": 4309
+      },
+      "defaultLoadout": {
+        "weapons": []
+      },
+      "defaultHealth": 80,
+      "defaultVisionRange": 3000
+    },
+    {
+      "id": "mi8_utility",
+      "name": "Mi-8 Hip",
+      "subcategory": "UtilityHelicopter",
+      "manufacturer": "Mil",
+      "description": "Medium utility helicopter",
+      "specifications": {
+        "maxSpeed": 250,
+        "cruiseSpeed": 220,
+        "combatRadius": 450000,
+        "serviceCeiling": 5000,
+        "capacity": 24,
+        "emptyWeight": 7260,
+        "maxTakeoffWeight": 13000
+      },
+      "defaultLoadout": {
+        "weapons": []
+      },
+      "defaultHealth": 85,
+      "defaultVisionRange": 3500
+    }
+  ]
+}

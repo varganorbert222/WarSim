@@ -22,6 +22,7 @@
   "units": [
     {
       "name": "Viper 1-1",
+      "unitTypeId": "f16_multirole",
       "category": "AIRPLANE",
       "subcategory": "Multirole",
       "latitude": 41.6102,
@@ -32,13 +33,11 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 8000,
-      "baseLocation": "batumi",
-      "properties": {
-        "capacity": 1
-      }
+      "baseLocation": "batumi"
     },
     {
       "name": "Viper 1-2",
+      "unitTypeId": "f16_multirole",
       "category": "AIRPLANE",
       "subcategory": "Multirole",
       "latitude": 41.6122,
@@ -49,13 +48,11 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 8000,
-      "baseLocation": "batumi",
-      "properties": {
-        "capacity": 1
-      }
+      "baseLocation": "batumi"
     },
     {
       "name": "Grach 2-1",
+      "unitTypeId": "su25_attack",
       "category": "AIRPLANE",
       "subcategory": "Attack",
       "latitude": 41.9281,
@@ -66,13 +63,11 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 5000,
-      "baseLocation": "kobuleti",
-      "properties": {
-        "capacity": 1
-      }
+      "baseLocation": "kobuleti"
     },
     {
       "name": "Eye-1",
+      "unitTypeId": "uav_recon",
       "category": "AIRPLANE",
       "subcategory": "UAV",
       "latitude": 42.1768,
@@ -83,13 +78,11 @@
       "factionId": 1,
       "health": 50,
       "visionRangeMeters": 12000,
-      "baseLocation": "kutaisi",
-      "properties": {
-        "capacity": 0
-      }
+      "baseLocation": "kutaisi"
     },
     {
       "name": "Dustoff 3-1",
+      "unitTypeId": "uh1_transport",
       "category": "HELICOPTER",
       "subcategory": "TransportHelicopter",
       "latitude": 42.2395,
@@ -100,11 +93,11 @@
       "factionId": 1,
       "health": 80,
       "visionRangeMeters": 3000,
-      "baseLocation": "senaki",
-      "properties": {}
+      "baseLocation": "senaki"
     },
     {
       "name": "1st Rifle Platoon",
+      "unitTypeId": "infantry_rifle",
       "category": "GROUND_UNIT",
       "subcategory": "Infantry",
       "latitude": 41.6168,
@@ -115,13 +108,11 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 800,
-      "baseLocation": "batumi_city",
-      "properties": {
-        "strength": 30
-      }
+      "baseLocation": "batumi_city"
     },
     {
       "name": "Tank Platoon Alpha",
+      "unitTypeId": "m1_abrams",
       "category": "GROUND_UNIT",
       "subcategory": "MainBattleTank",
       "latitude": 41.9842,
@@ -132,13 +123,11 @@
       "factionId": 1,
       "health": 150,
       "visionRangeMeters": 3000,
-      "baseLocation": "gori",
-      "properties": {
-        "crew": 4
-      }
+      "baseLocation": "gori"
     },
     {
       "name": "Patriot Battery 1",
+      "unitTypeId": "patriot_sam",
       "category": "GROUND_UNIT",
       "subcategory": "SAMLongRange",
       "latitude": 41.7151,
@@ -149,13 +138,11 @@
       "factionId": 1,
       "health": 120,
       "visionRangeMeters": 15000,
-      "baseLocation": "tbilisi",
-      "properties": {
-        "crew": 6
-      }
+      "baseLocation": "tbilisi"
     },
     {
       "name": "Shilka Defense 2",
+      "unitTypeId": "shilka_aaa",
       "category": "GROUND_UNIT",
       "subcategory": "AAA",
       "latitude": 42.1477,
@@ -166,13 +153,11 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 5000,
-      "baseLocation": "poti",
-      "properties": {
-        "crew": 4
-      }
+      "baseLocation": "poti"
     },
     {
       "name": "GNS Dioskuria",
+      "unitTypeId": "krivak_frigate",
       "category": "SHIP",
       "subcategory": "Frigate",
       "latitude": 41.6425,
@@ -183,13 +168,11 @@
       "factionId": 1,
       "health": 200,
       "visionRangeMeters": 10000,
-      "baseLocation": "batumi_port",
-      "properties": {
-        "crew": 150
-      }
+      "baseLocation": "batumi_port"
     },
     {
       "name": "PB-201",
+      "unitTypeId": "patrol_boat",
       "category": "SHIP",
       "subcategory": "PatrolBoat",
       "latitude": 42.1547,
@@ -200,13 +183,11 @@
       "factionId": 1,
       "health": 80,
       "visionRangeMeters": 6000,
-      "baseLocation": "poti_port",
-      "properties": {
-        "crew": 25
-      }
+      "baseLocation": "poti_port"
     },
     {
       "name": "Flanker 1-1",
+      "unitTypeId": "su27_interceptor",
       "category": "AIRPLANE",
       "subcategory": "Interceptor",
       "latitude": 45.0021,
@@ -217,13 +198,11 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 10000,
-      "baseLocation": "anapa",
-      "properties": {
-        "capacity": 1
-      }
+      "baseLocation": "anapa"
     },
     {
       "name": "Flanker 1-2",
+      "unitTypeId": "su27_interceptor",
       "category": "AIRPLANE",
       "subcategory": "Interceptor",
       "latitude": 45.0051,
@@ -234,13 +213,11 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 10000,
-      "baseLocation": "anapa",
-      "properties": {
-        "capacity": 1
-      }
+      "baseLocation": "anapa"
     },
     {
       "name": "Frogfoot 2-1",
+      "unitTypeId": "su25_attack",
       "category": "AIRPLANE",
       "subcategory": "Attack",
       "latitude": 43.7889,
@@ -251,13 +228,11 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 5000,
-      "baseLocation": "mozdok",
-      "properties": {
-        "capacity": 1
-      }
+      "baseLocation": "mozdok"
     },
     {
       "name": "Mainstay 3-1",
+      "unitTypeId": "a50_awacs",
       "category": "AIRPLANE",
       "subcategory": "AWACS",
       "latitude": 44.2251,
@@ -268,13 +243,11 @@
       "factionId": 2,
       "health": 120,
       "visionRangeMeters": 50000,
-      "baseLocation": "mineralnye",
-      "properties": {
-        "capacity": 10
-      }
+      "baseLocation": "mineralnye"
     },
     {
       "name": "Havoc 4-1",
+      "unitTypeId": "mi24_attack",
       "category": "HELICOPTER",
       "subcategory": "AttackHelicopter",
       "latitude": 43.0970,
@@ -285,11 +258,11 @@
       "factionId": 2,
       "health": 90,
       "visionRangeMeters": 4000,
-      "baseLocation": "gudauta",
-      "properties": {}
+      "baseLocation": "gudauta"
     },
     {
       "name": "VDV Airborne Company",
+      "unitTypeId": "infantry_rifle",
       "category": "GROUND_UNIT",
       "subcategory": "Infantry",
       "latitude": 43.0015,
@@ -300,13 +273,11 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 1000,
-      "baseLocation": "sukhumi",
-      "properties": {
-        "strength": 80
-      }
+      "baseLocation": "sukhumi"
     },
     {
       "name": "T-90 Platoon Bravo",
+      "unitTypeId": "t90_mbt",
       "category": "GROUND_UNIT",
       "subcategory": "MainBattleTank",
       "latitude": 43.0368,
@@ -317,13 +288,11 @@
       "factionId": 2,
       "health": 180,
       "visionRangeMeters": 3500,
-      "baseLocation": "vladikavkaz",
-      "properties": {
-        "crew": 3
-      }
+      "baseLocation": "vladikavkaz"
     },
     {
       "name": "S-300 Battery 5",
+      "unitTypeId": "s300_sam",
       "category": "GROUND_UNIT",
       "subcategory": "SAMLongRange",
       "latitude": 43.8089,
@@ -334,13 +303,11 @@
       "factionId": 2,
       "health": 150,
       "visionRangeMeters": 18000,
-      "baseLocation": "mozdok",
-      "properties": {
-        "crew": 8
-      }
+      "baseLocation": "mozdok"
     },
     {
       "name": "Smerch Battery 1",
+      "unitTypeId": "smerch_mlrs",
       "category": "GROUND_UNIT",
       "subcategory": "MLRS",
       "latitude": 44.5392,
@@ -351,13 +318,11 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 2000,
-      "baseLocation": "gelendzhik",
-      "properties": {
-        "crew": 6
-      }
+      "baseLocation": "gelendzhik"
     },
     {
       "name": "RFS Smetlivy",
+      "unitTypeId": "udaloy_destroyer",
       "category": "SHIP",
       "subcategory": "Destroyer",
       "latitude": 44.7193,
@@ -368,13 +333,11 @@
       "factionId": 2,
       "health": 250,
       "visionRangeMeters": 12000,
-      "baseLocation": "novorossiysk_port",
-      "properties": {
-        "crew": 280
-      }
+      "baseLocation": "novorossiysk_port"
     },
     {
       "name": "RFS Merkury",
+      "unitTypeId": "tarantul_corvette",
       "category": "SHIP",
       "subcategory": "Corvette",
       "latitude": 44.1042,
@@ -385,13 +348,11 @@
       "factionId": 2,
       "health": 150,
       "visionRangeMeters": 8000,
-      "baseLocation": "tuapse_port",
-      "properties": {
-        "crew": 60
-      }
+      "baseLocation": "tuapse_port"
     },
     {
       "name": "RFS Kilo-636",
+      "unitTypeId": "kilo_submarine",
       "category": "SHIP",
       "subcategory": "Submarine",
       "latitude": 43.5397,
@@ -402,96 +363,8 @@
       "factionId": 2,
       "health": 120,
       "visionRangeMeters": 15000,
-      "baseLocation": "sochi_port",
-      "properties": {
-        "crew": 52
-      }
+      "baseLocation": "sochi_port"
     }
   ],
-  "staticStructures": [
-    {
-      "name": "Batumi ATC Radar",
-      "category": "STRUCTURE",
-      "subcategory": "RadarTower",
-      "latitude": 41.6202,
-      "longitude": 41.6097,
-      "heading": 0,
-      "factionId": 1,
-      "health": 150,
-      "visionRangeMeters": 20000,
-      "linkedAirbase": "batumi"
-    },
-    {
-      "name": "Kutaisi Hangar 1",
-      "category": "STRUCTURE",
-      "subcategory": "Hangar",
-      "latitude": 42.1718,
-      "longitude": 42.4877,
-      "heading": 0,
-      "factionId": 1,
-      "health": 200,
-      "visionRangeMeters": 500,
-      "linkedAirbase": "kutaisi"
-    },
-    {
-      "name": "Tbilisi Command Center",
-      "category": "STRUCTURE",
-      "subcategory": "CommandBunker",
-      "latitude": 41.7151,
-      "longitude": 44.8471,
-      "heading": 0,
-      "factionId": 1,
-      "health": 300,
-      "visionRangeMeters": 5000,
-      "linkedCity": "tbilisi"
-    },
-    {
-      "name": "Anapa Early Warning Radar",
-      "category": "STRUCTURE",
-      "subcategory": "RadarTower",
-      "latitude": 45.0171,
-      "longitude": 37.3573,
-      "heading": 0,
-      "factionId": 2,
-      "health": 180,
-      "visionRangeMeters": 30000,
-      "linkedAirbase": "anapa"
-    },
-    {
-      "name": "Mozdok HAS-3",
-      "category": "STRUCTURE",
-      "subcategory": "HardenedAircraftShelter",
-      "latitude": 43.7789,
-      "longitude": 44.6141,
-      "heading": 0,
-      "factionId": 2,
-      "health": 350,
-      "visionRangeMeters": 200,
-      "linkedAirbase": "mozdok"
-    },
-    {
-      "name": "Sochi Comms Relay",
-      "category": "STRUCTURE",
-      "subcategory": "CommunicationTower",
-      "latitude": 43.6055,
-      "longitude": 39.7231,
-      "heading": 0,
-      "factionId": 2,
-      "health": 100,
-      "visionRangeMeters": 8000,
-      "linkedCity": "sochi"
-    },
-    {
-      "name": "Beslan SA-6 Site",
-      "category": "STRUCTURE",
-      "subcategory": "StaticSAM",
-      "latitude": 43.2251,
-      "longitude": 44.5964,
-      "heading": 0,
-      "factionId": 2,
-      "health": 200,
-      "visionRangeMeters": 12000,
-      "linkedAirbase": "beslan"
-    }
-  ]
+  "staticStructures": []
 }

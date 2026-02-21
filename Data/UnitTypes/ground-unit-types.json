@@ -1,0 +1,162 @@
+{
+  "groundUnitTypes": [
+    {
+      "id": "infantry_rifle",
+      "name": "Rifle Infantry Squad",
+      "subcategory": "Infantry",
+      "description": "Standard infantry unit",
+      "specifications": {
+        "maxSpeed": 5,
+        "strength": 30,
+        "equipmentWeight": 450
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "rifle_762mm", "count": 1 }
+        ]
+      },
+      "defaultHealth": 100,
+      "defaultVisionRange": 800
+    },
+    {
+      "id": "t90_mbt",
+      "name": "T-90 Main Battle Tank",
+      "subcategory": "MainBattleTank",
+      "manufacturer": "Uralvagonzavod",
+      "description": "Advanced main battle tank",
+      "specifications": {
+        "maxSpeed": 60,
+        "crew": 3,
+        "weight": 46500,
+        "armor": 200
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "tank_cannon_125mm", "count": 1 }
+        ]
+      },
+      "defaultHealth": 180,
+      "defaultVisionRange": 3500
+    },
+    {
+      "id": "m1_abrams",
+      "name": "M1 Abrams",
+      "subcategory": "MainBattleTank",
+      "manufacturer": "General Dynamics",
+      "description": "American main battle tank",
+      "specifications": {
+        "maxSpeed": 67,
+        "crew": 4,
+        "weight": 54500,
+        "armor": 200
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "tank_cannon_125mm", "count": 1 }
+        ]
+      },
+      "defaultHealth": 150,
+      "defaultVisionRange": 3000
+    },
+    {
+      "id": "s300_sam",
+      "name": "S-300 SAM System",
+      "subcategory": "SAMLongRange",
+      "manufacturer": "Almaz",
+      "description": "Long-range surface-to-air missile system",
+      "specifications": {
+        "maxSpeed": 40,
+        "crew": 8,
+        "weight": 42000,
+        "radarRange": 150000
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "missile_aa_long", "count": 4 }
+        ]
+      },
+      "defaultHealth": 150,
+      "defaultVisionRange": 18000
+    },
+    {
+      "id": "patriot_sam",
+      "name": "MIM-104 Patriot",
+      "subcategory": "SAMLongRange",
+      "manufacturer": "Raytheon",
+      "description": "Advanced air defense system",
+      "specifications": {
+        "maxSpeed": 40,
+        "crew": 6,
+        "weight": 38000,
+        "radarRange": 170000
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "missile_aa_long", "count": 4 }
+        ]
+      },
+      "defaultHealth": 120,
+      "defaultVisionRange": 15000
+    },
+    {
+      "id": "shilka_aaa",
+      "name": "ZSU-23-4 Shilka",
+      "subcategory": "AAA",
+      "manufacturer": "Ulyanovsk",
+      "description": "Self-propelled anti-aircraft gun",
+      "specifications": {
+        "maxSpeed": 50,
+        "crew": 4,
+        "weight": 20500,
+        "radarRange": 20000
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "gun_30mm", "count": 2 }
+        ]
+      },
+      "defaultHealth": 100,
+      "defaultVisionRange": 5000
+    },
+    {
+      "id": "smerch_mlrs",
+      "name": "9K58 Smerch",
+      "subcategory": "MLRS",
+      "manufacturer": "Splav",
+      "description": "Heavy multiple rocket launcher",
+      "specifications": {
+        "maxSpeed": 60,
+        "crew": 6,
+        "weight": 43700,
+        "rocketRange": 70000
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "mlrs_rocket", "count": 1 }
+        ]
+      },
+      "defaultHealth": 100,
+      "defaultVisionRange": 2000
+    },
+    {
+      "id": "btr80_apc",
+      "name": "BTR-80 APC",
+      "subcategory": "ArmoredPersonnelCarrier",
+      "manufacturer": "GAZ",
+      "description": "Armored personnel carrier",
+      "specifications": {
+        "maxSpeed": 80,
+        "crew": 3,
+        "capacity": 7,
+        "weight": 13600
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "cannon_20mm", "count": 1 }
+        ]
+      },
+      "defaultHealth": 90,
+      "defaultVisionRange": 2500
+    }
+  ]
+}

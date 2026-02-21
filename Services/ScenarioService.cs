@@ -71,11 +71,41 @@ namespace WarSim.Services
             // Add static structures
             units.AddRange(mission.StaticStructures.Select(s => CreateStructureFromDto(s)));
 
+            // Add static structures from map
+            var map = _mapService.GetCurrentMap();
+            if (map != null)
+            {
+                units.AddRange(map.AirbaseStructures.Select(s => CreateStructureFromMapDto(s)));
+                units.AddRange(map.CityStructures.Select(s => CreateStructureFromMapDto(s)));
+            }
+
             var projectiles = new List<Projectile>();
 
-            _logger.LogInformation($"Loaded mission '{mission.MissionName}' with {units.Count} total entities and {factions.Count} factions");
+            _logger.LogInformation($"Loaded mission '{mission.MissionName}' with {mission.Units.Count} dynamic units + {units.Count - mission.Units.Count} static structures");
 
             return new WorldState(units, projectiles, factions, 0);
+        }
+
+        private Structure CreateStructureFromMapDto(MapStructureDto dto)
+        {
+            if (!Enum.TryParse<StructureSubcategory>(dto.Subcategory, true, out var subcat))
+            {
+                subcat = StructureSubcategory.MilitaryBuilding;
+            }
+
+            var structure = new Structure(subcat)
+            {
+                Name = dto.Name,
+                Latitude = dto.Latitude,
+                Longitude = dto.Longitude,
+                Heading = dto.Heading,
+                Status = UnitStatus.Idle,
+                FactionId = dto.FactionId,
+                Health = dto.Health,
+                VisionRangeMeters = dto.VisionRangeMeters
+            };
+
+            return structure;
         }
 
         private Structure CreateStructureFromDto(StaticStructureDto dto)

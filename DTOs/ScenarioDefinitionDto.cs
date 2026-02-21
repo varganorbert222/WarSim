@@ -103,6 +103,9 @@ namespace WarSim.DTOs
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
+        [JsonPropertyName("unitTypeId")]
+        public string UnitTypeId { get; set; } = string.Empty;
+
         [JsonPropertyName("category")]
         public string Category { get; set; } = string.Empty;
 

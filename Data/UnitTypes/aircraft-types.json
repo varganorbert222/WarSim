@@ -1,0 +1,118 @@
+{
+  "aircraftTypes": [
+    {
+      "id": "f16_multirole",
+      "name": "F-16 Fighting Falcon",
+      "subcategory": "Multirole",
+      "manufacturer": "General Dynamics",
+      "description": "Multirole fighter aircraft",
+      "specifications": {
+        "maxSpeed": 2142,
+        "cruiseSpeed": 850,
+        "combatRadius": 550000,
+        "serviceceiling": 15240,
+        "capacity": 1,
+        "emptyWeight": 8570,
+        "maxTakeoffWeight": 19200
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "cannon_20mm", "count": 1 },
+          { "weaponId": "missile_aa_short", "count": 4 }
+        ]
+      },
+      "defaultHealth": 100,
+      "defaultVisionRange": 8000
+    },
+    {
+      "id": "su27_interceptor",
+      "name": "Su-27 Flanker",
+      "subcategory": "Interceptor",
+      "manufacturer": "Sukhoi",
+      "description": "Air superiority fighter",
+      "specifications": {
+        "maxSpeed": 2500,
+        "cruiseSpeed": 900,
+        "combatRadius": 1500000,
+        "serviceC eiling": 19000,
+        "capacity": 1,
+        "emptyWeight": 16380,
+        "maxTakeoffWeight": 30000
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "cannon_30mm", "count": 1 },
+          { "weaponId": "missile_aa_long", "count": 6 }
+        ]
+      },
+      "defaultHealth": 100,
+      "defaultVisionRange": 10000
+    },
+    {
+      "id": "su25_attack",
+      "name": "Su-25 Frogfoot",
+      "subcategory": "Attack",
+      "manufacturer": "Sukhoi",
+      "description": "Ground attack aircraft",
+      "specifications": {
+        "maxSpeed": 975,
+        "cruiseSpeed": 750,
+        "combatRadius": 375000,
+        "serviceC eiling": 7000,
+        "capacity": 1,
+        "emptyWeight": 9500,
+        "maxTakeoffWeight": 19500
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "gun_30mm", "count": 1 },
+          { "weaponId": "missile_aa_short", "count": 2 }
+        ]
+      },
+      "defaultHealth": 120,
+      "defaultVisionRange": 5000
+    },
+    {
+      "id": "uav_recon",
+      "name": "MQ-1 Predator",
+      "subcategory": "UAV",
+      "manufacturer": "General Atomics",
+      "description": "Reconnaissance UAV",
+      "specifications": {
+        "maxSpeed": 217,
+        "cruiseSpeed": 130,
+        "combatRadius": 1100000,
+        "serviceC eiling": 7620,
+        "capacity": 0,
+        "emptyWeight": 512,
+        "maxTakeoffWeight": 1020
+      },
+      "defaultLoadout": {
+        "weapons": []
+      },
+      "defaultHealth": 50,
+      "defaultVisionRange": 12000
+    },
+    {
+      "id": "a50_awacs",
+      "name": "A-50 Mainstay",
+      "subcategory": "AWACS",
+      "manufacturer": "Beriev",
+      "description": "Airborne early warning and control",
+      "specifications": {
+        "maxSpeed": 800,
+        "cruiseSpeed": 450,
+        "combatRadius": 1000000,
+        "serviceC eiling": 10000,
+        "capacity": 10,
+        "emptyWeight": 90000,
+        "maxTakeoffWeight": 190000
+      },
+      "defaultLoadout": {
+        "weapons": []
+      },
+      "defaultHealth": 120,
+      "defaultVisionRange": 50000
+    }
+  ]
+}

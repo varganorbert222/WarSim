@@ -1,0 +1,113 @@
+{
+  "shipTypes": [
+    {
+      "id": "udaloy_destroyer",
+      "name": "Udaloy-class Destroyer",
+      "subcategory": "Destroyer",
+      "manufacturer": "Yantar Shipyard",
+      "description": "Anti-submarine destroyer",
+      "specifications": {
+        "maxSpeed": 30,
+        "displacement": 8500,
+        "crew": 280,
+        "length": 163,
+        "beam": 19
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "naval_76mm", "count": 2 },
+          { "weaponId": "missile_aa_long", "count": 16 },
+          { "weaponId": "missile_antiship", "count": 8 }
+        ]
+      },
+      "defaultHealth": 250,
+      "defaultVisionRange": 12000
+    },
+    {
+      "id": "krivak_frigate",
+      "name": "Krivak-class Frigate",
+      "subcategory": "Frigate",
+      "manufacturer": "Kaliningrad",
+      "description": "Multi-purpose frigate",
+      "specifications": {
+        "maxSpeed": 32,
+        "displacement": 3600,
+        "crew": 150,
+        "length": 123,
+        "beam": 14
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "naval_76mm", "count": 1 },
+          { "weaponId": "missile_antiship", "count": 8 }
+        ]
+      },
+      "defaultHealth": 200,
+      "defaultVisionRange": 10000
+    },
+    {
+      "id": "tarantul_corvette",
+      "name": "Tarantul-class Corvette",
+      "subcategory": "Corvette",
+      "manufacturer": "Almaz",
+      "description": "Missile corvette",
+      "specifications": {
+        "maxSpeed": 36,
+        "displacement": 540,
+        "crew": 60,
+        "length": 56,
+        "beam": 10
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "naval_76mm", "count": 1 },
+          { "weaponId": "missile_aa_short", "count": 8 }
+        ]
+      },
+      "defaultHealth": 150,
+      "defaultVisionRange": 8000
+    },
+    {
+      "id": "kilo_submarine",
+      "name": "Kilo-class Submarine",
+      "subcategory": "Submarine",
+      "manufacturer": "Admiralty Shipyards",
+      "description": "Diesel-electric attack submarine",
+      "specifications": {
+        "maxSpeed": 17,
+        "displacement": 3950,
+        "crew": 52,
+        "length": 74,
+        "beam": 10,
+        "diveDepth": 300
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "missile_antiship", "count": 4 }
+        ]
+      },
+      "defaultHealth": 120,
+      "defaultVisionRange": 15000
+    },
+    {
+      "id": "patrol_boat",
+      "name": "Fast Patrol Boat",
+      "subcategory": "PatrolBoat",
+      "description": "Coastal patrol and interdiction",
+      "specifications": {
+        "maxSpeed": 45,
+        "displacement": 250,
+        "crew": 25,
+        "length": 35,
+        "beam": 7
+      },
+      "defaultLoadout": {
+        "weapons": [
+          { "weaponId": "cannon_20mm", "count": 2 }
+        ]
+      },
+      "defaultHealth": 80,
+      "defaultVisionRange": 6000
+    }
+  ]
+}

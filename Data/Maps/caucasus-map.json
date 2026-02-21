@@ -353,5 +353,100 @@
       "description": "Important river crossing near Senaki",
       "controlFaction": "Blue"
     }
+  ],
+  "airbaseStructures": [
+    {
+      "id": "batumi_radar",
+      "name": "Batumi ATC Radar",
+      "airbaseId": "batumi",
+      "category": "STRUCTURE",
+      "subcategory": "RadarTower",
+      "latitude": 41.6202,
+      "longitude": 41.6097,
+      "heading": 0,
+      "factionId": 1,
+      "health": 150,
+      "visionRangeMeters": 20000
+    },
+    {
+      "id": "kutaisi_hangar",
+      "name": "Kutaisi Hangar 1",
+      "airbaseId": "kutaisi",
+      "category": "STRUCTURE",
+      "subcategory": "Hangar",
+      "latitude": 42.1718,
+      "longitude": 42.4877,
+      "heading": 0,
+      "factionId": 1,
+      "health": 200,
+      "visionRangeMeters": 500
+    },
+    {
+      "id": "anapa_radar",
+      "name": "Anapa Early Warning Radar",
+      "airbaseId": "anapa",
+      "category": "STRUCTURE",
+      "subcategory": "RadarTower",
+      "latitude": 45.0171,
+      "longitude": 37.3573,
+      "heading": 0,
+      "factionId": 2,
+      "health": 180,
+      "visionRangeMeters": 30000
+    },
+    {
+      "id": "mozdok_has",
+      "name": "Mozdok HAS-3",
+      "airbaseId": "mozdok",
+      "category": "STRUCTURE",
+      "subcategory": "HardenedAircraftShelter",
+      "latitude": 43.7789,
+      "longitude": 44.6141,
+      "heading": 0,
+      "factionId": 2,
+      "health": 350,
+      "visionRangeMeters": 200
+    }
+  ],
+  "cityStructures": [
+    {
+      "id": "tbilisi_command",
+      "name": "Tbilisi Command Center",
+      "cityId": "tbilisi",
+      "category": "STRUCTURE",
+      "subcategory": "CommandBunker",
+      "latitude": 41.7151,
+      "longitude": 44.8471,
+      "heading": 0,
+      "factionId": 1,
+      "health": 300,
+      "visionRangeMeters": 5000
+    },
+    {
+      "id": "sochi_comms",
+      "name": "Sochi Comms Relay",
+      "cityId": "sochi",
+      "category": "STRUCTURE",
+      "subcategory": "CommunicationTower",
+      "latitude": 43.6055,
+      "longitude": 39.7231,
+      "heading": 0,
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 8000
+    },
+    {
+      "id": "beslan_sam",
+      "name": "Beslan SA-6 Site",
+      "cityId": "beslan",
+      "category": "STRUCTURE",
+      "subcategory": "StaticSAM",
+      "latitude": 43.2251,
+      "longitude": 44.5964,
+      "heading": 0,
+      "factionId": 2,
+      "health": 200,
+      "visionRangeMeters": 12000
+    }
   ]
 }

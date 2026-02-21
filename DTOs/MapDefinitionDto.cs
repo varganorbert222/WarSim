@@ -30,6 +30,12 @@ namespace WarSim.DTOs
 
         [JsonPropertyName("strategicPoints")]
         public List<StrategicPointDto> StrategicPoints { get; set; } = new();
+
+        [JsonPropertyName("airbaseStructures")]
+        public List<MapStructureDto> AirbaseStructures { get; set; } = new();
+
+        [JsonPropertyName("cityStructures")]
+        public List<MapStructureDto> CityStructures { get; set; } = new();
     }
 
     public class AirbaseDto
@@ -147,5 +153,44 @@ namespace WarSim.DTOs
 
         [JsonPropertyName("longitude")]
         public double Longitude { get; set; }
+    }
+
+    public class MapStructureDto
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [JsonPropertyName("airbaseId")]
+        public string AirbaseId { get; set; } = string.Empty;
+
+        [JsonPropertyName("cityId")]
+        public string CityId { get; set; } = string.Empty;
+
+        [JsonPropertyName("category")]
+        public string Category { get; set; } = string.Empty;
+
+        [JsonPropertyName("subcategory")]
+        public string Subcategory { get; set; } = string.Empty;
+
+        [JsonPropertyName("latitude")]
+        public double Latitude { get; set; }
+
+        [JsonPropertyName("longitude")]
+        public double Longitude { get; set; }
+
+        [JsonPropertyName("heading")]
+        public double Heading { get; set; }
+
+        [JsonPropertyName("factionId")]
+        public int FactionId { get; set; }
+
+        [JsonPropertyName("health")]
+        public double Health { get; set; } = 100.0;
+
+        [JsonPropertyName("visionRangeMeters")]
+        public double VisionRangeMeters { get; set; } = 2000.0;
     }
 }
