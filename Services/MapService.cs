@@ -1,67 +1,73 @@
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using WarSim.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace WarSim.Services
 {
     public class MapService
     {
         private readonly ILogger<MapService> _logger;
-        private readonly Dictionary<string, MapDefinitionDto> _maps = new();
+        private MapDefinitionDto? _currentMap;
 
         public MapService(ILogger<MapService> logger)
         {
             _logger = logger;
-            LoadMaps();
         }
 
-        private void LoadMaps()
+        public MapDefinitionDto LoadMap(string mapId)
         {
-            try
+            var path = Path.Combine("Data", "Maps", $"{mapId}-map.json");
+            
+            if (!File.Exists(path))
             {
-                var mapsPath = Path.Combine("Data", "Maps");
-                if (!Directory.Exists(mapsPath))
-                {
-                    _logger.LogWarning("Maps directory not found: {Path}", mapsPath);
-                    return;
-                }
-
-                var mapFiles = Directory.GetFiles(mapsPath, "*-map.json");
-                foreach (var mapFile in mapFiles)
-                {
-                    var json = File.ReadAllText(mapFile);
-                    var map = JsonSerializer.Deserialize<MapDefinitionDto>(json, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    if (map != null)
-                    {
-                        var mapId = Path.GetFileNameWithoutExtension(mapFile).Replace("-map", "");
-                        _maps[mapId] = map;
-                        _logger.LogInformation($"Loaded map '{map.Name}' with ID '{mapId}': {map.Airbases.Count} airbases, {map.Cities.Count} cities, {map.StaticStructures.Count} structures");
-                    }
-                }
+                throw new FileNotFoundException($"Map file not found: {path}");
             }
-            catch (Exception ex)
+
+            var json = File.ReadAllText(path);
+            var map = JsonSerializer.Deserialize<MapDefinitionDto>(json, new JsonSerializerOptions
             {
-                _logger.LogError(ex, "Failed to load maps");
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (map == null)
+            {
+                throw new InvalidOperationException($"Failed to deserialize map: {mapId}");
             }
+
+            _currentMap = map;
+            _logger.LogInformation($"Loaded map '{map.Name}' with {map.Airbases.Count} airbases, {map.Cities.Count} cities");
+            return map;
         }
 
-        public MapDefinitionDto? GetMap(string mapId)
+        public MapDefinitionDto? GetCurrentMap() => _currentMap;
+
+        public AirbaseDto? GetAirbase(string airbaseId)
         {
-            return _maps.TryGetValue(mapId, out var map) ? map : null;
+            return _currentMap?.Airbases.FirstOrDefault(a => a.Id.Equals(airbaseId, StringComparison.OrdinalIgnoreCase));
         }
 
-        public List<string> GetAvailableMapIds()
+        public CityDto? GetCity(string cityId)
         {
-            return _maps.Keys.ToList();
+            return _currentMap?.Cities.FirstOrDefault(c => c.Id.Equals(cityId, StringComparison.OrdinalIgnoreCase));
         }
 
-        public List<MapDefinitionDto> GetAllMaps()
+        public NavalZoneDto? GetNavalZone(string zoneId)
         {
-            return _maps.Values.ToList();
+            return _currentMap?.NavalZones.FirstOrDefault(n => n.Id.Equals(zoneId, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public List<AirbaseDto> GetAirbasesByFaction(string faction)
+        {
+            return _currentMap?.Airbases
+                .Where(a => a.ControlFaction.Equals(faction, StringComparison.OrdinalIgnoreCase))
+                .ToList() ?? new List<AirbaseDto>();
+        }
+
+        public List<NavalZoneDto> GetNavalZonesWithRepair()
+        {
+            return _currentMap?.NavalZones
+                .Where(n => n.Features.Contains("Repair"))
+                .ToList() ?? new List<NavalZoneDto>();
         }
     }
 }

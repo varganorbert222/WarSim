@@ -148,6 +148,9 @@ namespace WarSim.DTOs
         [JsonPropertyName("visionRangeMeters")]
         public double VisionRangeMeters { get; set; } = 2000.0;
 
+        [JsonPropertyName("baseLocation")]
+        public string BaseLocation { get; set; } = string.Empty;
+
         [JsonPropertyName("properties")]
         public Dictionary<string, object> Properties { get; set; } = new();
     }

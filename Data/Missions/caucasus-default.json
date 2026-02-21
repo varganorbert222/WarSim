@@ -1,7 +1,10 @@
 {
-  "name": "Georgia Conflict - Caucasus Theater",
-  "description": "Realistic DCS World Caucasus scenario with Blue (Georgia) vs Red (Russia) forces",
+  "missionName": "Georgia Conflict - Initial Deployment",
+  "description": "Default unit deployment for Caucasus theater - Blue (Georgia) vs Red (Russia)",
   "mapId": "caucasus",
+  "version": "1.0",
+  "startTime": "08:00:00",
+  "weather": "Clear",
   "factions": [
     {
       "id": 1,
@@ -29,6 +32,7 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 8000,
+      "baseLocation": "batumi",
       "properties": {
         "capacity": 1
       }
@@ -45,6 +49,7 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 8000,
+      "baseLocation": "batumi",
       "properties": {
         "capacity": 1
       }
@@ -61,6 +66,7 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 5000,
+      "baseLocation": "kobuleti",
       "properties": {
         "capacity": 1
       }
@@ -77,6 +83,7 @@
       "factionId": 1,
       "health": 50,
       "visionRangeMeters": 12000,
+      "baseLocation": "kutaisi",
       "properties": {
         "capacity": 0
       }
@@ -93,6 +100,7 @@
       "factionId": 1,
       "health": 80,
       "visionRangeMeters": 3000,
+      "baseLocation": "senaki",
       "properties": {}
     },
     {
@@ -107,6 +115,7 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 800,
+      "baseLocation": "batumi_city",
       "properties": {
         "strength": 30
       }
@@ -123,6 +132,7 @@
       "factionId": 1,
       "health": 150,
       "visionRangeMeters": 3000,
+      "baseLocation": "gori",
       "properties": {
         "crew": 4
       }
@@ -139,6 +149,7 @@
       "factionId": 1,
       "health": 120,
       "visionRangeMeters": 15000,
+      "baseLocation": "tbilisi",
       "properties": {
         "crew": 6
       }
@@ -155,6 +166,7 @@
       "factionId": 1,
       "health": 100,
       "visionRangeMeters": 5000,
+      "baseLocation": "poti",
       "properties": {
         "crew": 4
       }
@@ -171,6 +183,7 @@
       "factionId": 1,
       "health": 200,
       "visionRangeMeters": 10000,
+      "baseLocation": "batumi_port",
       "properties": {
         "crew": 150
       }
@@ -187,6 +200,7 @@
       "factionId": 1,
       "health": 80,
       "visionRangeMeters": 6000,
+      "baseLocation": "poti_port",
       "properties": {
         "crew": 25
       }
@@ -203,6 +217,7 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 10000,
+      "baseLocation": "anapa",
       "properties": {
         "capacity": 1
       }
@@ -219,6 +234,7 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 10000,
+      "baseLocation": "anapa",
       "properties": {
         "capacity": 1
       }
@@ -235,6 +251,7 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 5000,
+      "baseLocation": "mozdok",
       "properties": {
         "capacity": 1
       }
@@ -251,6 +268,7 @@
       "factionId": 2,
       "health": 120,
       "visionRangeMeters": 50000,
+      "baseLocation": "mineralnye",
       "properties": {
         "capacity": 10
       }
@@ -267,6 +285,7 @@
       "factionId": 2,
       "health": 90,
       "visionRangeMeters": 4000,
+      "baseLocation": "gudauta",
       "properties": {}
     },
     {
@@ -281,6 +300,7 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 1000,
+      "baseLocation": "sukhumi",
       "properties": {
         "strength": 80
       }
@@ -297,6 +317,7 @@
       "factionId": 2,
       "health": 180,
       "visionRangeMeters": 3500,
+      "baseLocation": "vladikavkaz",
       "properties": {
         "crew": 3
       }
@@ -313,6 +334,7 @@
       "factionId": 2,
       "health": 150,
       "visionRangeMeters": 18000,
+      "baseLocation": "mozdok",
       "properties": {
         "crew": 8
       }
@@ -329,6 +351,7 @@
       "factionId": 2,
       "health": 100,
       "visionRangeMeters": 2000,
+      "baseLocation": "gelendzhik",
       "properties": {
         "crew": 6
       }
@@ -345,6 +368,7 @@
       "factionId": 2,
       "health": 250,
       "visionRangeMeters": 12000,
+      "baseLocation": "novorossiysk_port",
       "properties": {
         "crew": 280
       }
@@ -361,6 +385,7 @@
       "factionId": 2,
       "health": 150,
       "visionRangeMeters": 8000,
+      "baseLocation": "tuapse_port",
       "properties": {
         "crew": 60
       }
@@ -377,9 +402,96 @@
       "factionId": 2,
       "health": 120,
       "visionRangeMeters": 15000,
+      "baseLocation": "sochi_port",
       "properties": {
         "crew": 52
       }
+    }
+  ],
+  "staticStructures": [
+    {
+      "name": "Batumi ATC Radar",
+      "category": "STRUCTURE",
+      "subcategory": "RadarTower",
+      "latitude": 41.6202,
+      "longitude": 41.6097,
+      "heading": 0,
+      "factionId": 1,
+      "health": 150,
+      "visionRangeMeters": 20000,
+      "linkedAirbase": "batumi"
+    },
+    {
+      "name": "Kutaisi Hangar 1",
+      "category": "STRUCTURE",
+      "subcategory": "Hangar",
+      "latitude": 42.1718,
+      "longitude": 42.4877,
+      "heading": 0,
+      "factionId": 1,
+      "health": 200,
+      "visionRangeMeters": 500,
+      "linkedAirbase": "kutaisi"
+    },
+    {
+      "name": "Tbilisi Command Center",
+      "category": "STRUCTURE",
+      "subcategory": "CommandBunker",
+      "latitude": 41.7151,
+      "longitude": 44.8471,
+      "heading": 0,
+      "factionId": 1,
+      "health": 300,
+      "visionRangeMeters": 5000,
+      "linkedCity": "tbilisi"
+    },
+    {
+      "name": "Anapa Early Warning Radar",
+      "category": "STRUCTURE",
+      "subcategory": "RadarTower",
+      "latitude": 45.0171,
+      "longitude": 37.3573,
+      "heading": 0,
+      "factionId": 2,
+      "health": 180,
+      "visionRangeMeters": 30000,
+      "linkedAirbase": "anapa"
+    },
+    {
+      "name": "Mozdok HAS-3",
+      "category": "STRUCTURE",
+      "subcategory": "HardenedAircraftShelter",
+      "latitude": 43.7789,
+      "longitude": 44.6141,
+      "heading": 0,
+      "factionId": 2,
+      "health": 350,
+      "visionRangeMeters": 200,
+      "linkedAirbase": "mozdok"
+    },
+    {
+      "name": "Sochi Comms Relay",
+      "category": "STRUCTURE",
+      "subcategory": "CommunicationTower",
+      "latitude": 43.6055,
+      "longitude": 39.7231,
+      "heading": 0,
+      "factionId": 2,
+      "health": 100,
+      "visionRangeMeters": 8000,
+      "linkedCity": "sochi"
+    },
+    {
+      "name": "Beslan SA-6 Site",
+      "category": "STRUCTURE",
+      "subcategory": "StaticSAM",
+      "latitude": 43.2251,
+      "longitude": 44.5964,
+      "heading": 0,
+      "factionId": 2,
+      "health": 200,
+      "visionRangeMeters": 12000,
+      "linkedAirbase": "beslan"
     }
   ]
 }

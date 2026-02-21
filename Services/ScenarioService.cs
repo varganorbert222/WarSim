@@ -15,37 +15,89 @@ namespace WarSim.Services
     {
         private readonly ILogger<ScenarioService> _logger;
         private readonly WeaponConfigService _weaponConfig;
+        private readonly MapService _mapService;
 
-        public ScenarioService(ILogger<ScenarioService> logger, WeaponConfigService weaponConfig)
+        public ScenarioService(ILogger<ScenarioService> logger, WeaponConfigService weaponConfig, MapService mapService)
         {
             _logger = logger;
             _weaponConfig = weaponConfig;
+            _mapService = mapService;
         }
 
-        public WorldState LoadScenarioFromFile(string filePath)
+        public WorldState LoadMissionFromFile(string filePath)
         {
             if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException($"Scenario file not found: {filePath}");
+                throw new FileNotFoundException($"Mission file not found: {filePath}");
             }
 
             var json = File.ReadAllText(filePath);
-            return LoadScenarioFromJson(json);
+            return LoadMissionFromJson(json);
         }
 
-        public WorldState LoadScenarioFromJson(string json)
+        public WorldState LoadMissionFromJson(string json)
         {
-            var scenarioDto = JsonSerializer.Deserialize<ScenarioDefinitionDto>(json, new JsonSerializerOptions
+            var missionDto = JsonSerializer.Deserialize<MissionDefinitionDto>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            if (scenarioDto == null)
+            if (missionDto == null)
             {
-                throw new InvalidOperationException("Failed to deserialize scenario JSON");
+                throw new InvalidOperationException("Failed to deserialize mission JSON");
             }
 
-            return BuildWorldStateFromDto(scenarioDto);
+            // Load the map
+            _mapService.LoadMap(missionDto.MapId);
+
+            return BuildWorldStateFromMission(missionDto);
+        }
+
+        private WorldState BuildWorldStateFromMission(MissionDefinitionDto mission)
+        {
+            var factions = mission.Factions.Select(f => new Faction
+            {
+                Id = f.Id,
+                Name = f.Name,
+                Color = f.Color,
+                Allies = f.Allies.ToList()
+            }).ToList();
+
+            var units = new List<Unit>();
+            
+            // Add dynamic units
+            units.AddRange(mission.Units.Select(u => CreateUnitFromDto(u)));
+            
+            // Add static structures
+            units.AddRange(mission.StaticStructures.Select(s => CreateStructureFromDto(s)));
+
+            var projectiles = new List<Projectile>();
+
+            _logger.LogInformation($"Loaded mission '{mission.MissionName}' with {units.Count} total entities and {factions.Count} factions");
+
+            return new WorldState(units, projectiles, factions, 0);
+        }
+
+        private Structure CreateStructureFromDto(StaticStructureDto dto)
+        {
+            if (!Enum.TryParse<StructureSubcategory>(dto.Subcategory, true, out var subcat))
+            {
+                subcat = StructureSubcategory.MilitaryBuilding;
+            }
+
+            var structure = new Structure(subcat)
+            {
+                Name = dto.Name,
+                Latitude = dto.Latitude,
+                Longitude = dto.Longitude,
+                Heading = dto.Heading,
+                Status = UnitStatus.Idle,
+                FactionId = dto.FactionId,
+                Health = dto.Health,
+                VisionRangeMeters = dto.VisionRangeMeters
+            };
+
+            return structure;
         }
 
         public ScenarioDefinitionDto ExportScenarioToDto(WorldState worldState)
@@ -317,12 +369,40 @@ namespace WarSim.Services
         }
 
         /// <summary>
-        /// Loads default Caucasus scenario from embedded JSON file
+        /// Loads default Caucasus mission from mission JSON file
         /// </summary>
         public WorldState CreateCaucasusScenario()
         {
-            var scenarioPath = Path.Combine("Data", "Scenarios", "caucasus-default.json");
-            return LoadScenarioFromFile(scenarioPath);
+            var missionPath = Path.Combine("Data", "Missions", "caucasus-default.json");
+            return LoadMissionFromFile(missionPath);
+        }
+
+        [Obsolete("Use LoadMissionFromFile instead")]
+        public WorldState LoadScenarioFromFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"Scenario file not found: {filePath}");
+            }
+
+            var json = File.ReadAllText(filePath);
+            return LoadScenarioFromJson(json);
+        }
+
+        [Obsolete("Use LoadMissionFromJson instead")]
+        public WorldState LoadScenarioFromJson(string json)
+        {
+            var scenarioDto = JsonSerializer.Deserialize<ScenarioDefinitionDto>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (scenarioDto == null)
+            {
+                throw new InvalidOperationException("Failed to deserialize scenario JSON");
+            }
+
+            return BuildWorldStateFromDto(scenarioDto);
         }
     }
 }
